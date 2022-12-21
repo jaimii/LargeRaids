@@ -35,8 +35,8 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ env.RELEASE_VERSION }}"
+          automatic_release_tag: "latest"
           prerelease: false
-          title: "v${{ env.RELEASE_VERSION }}"
+          title: "Plugin Download"
           files: |
             build/libs/LargeRaids-1.0.jar
