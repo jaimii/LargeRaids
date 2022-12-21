@@ -1,18 +1,18 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import com.solarrabbit.largeraids.nms.AbstractRaiderWrapper;
 
-import net.minecraft.world.entity.raid.EntityRaider;
+import net.minecraft.world.entity.raid.Raider;
 
 public class RaiderWrapper implements AbstractRaiderWrapper {
-    final EntityRaider raider;
+    final Raider raider;
 
-    RaiderWrapper(EntityRaider raider) {
+    RaiderWrapper(Raider raider) {
         this.raider = raider;
     }
 
     @Override
     public RaidWrapper getCurrentRaid() {
-        return new RaidWrapper(raider.fN());
+        return new RaidWrapper(raider.getCurrentRaid());
     }
 }

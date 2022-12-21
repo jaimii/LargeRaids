@@ -1,4 +1,4 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -9,19 +9,19 @@ import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
 import com.solarrabbit.largeraids.nms.AbstractPoiTypeWrapper;
 import com.solarrabbit.largeraids.nms.AbstractVillageManagerWrapper;
 
-import net.minecraft.core.BlockPosition;
-import net.minecraft.world.entity.ai.village.poi.VillagePlace;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
 
 public class VillageManagerWrapper implements AbstractVillageManagerWrapper {
-    private final VillagePlace poiManager;
+    private final PoiManager poiManager;
 
-    VillageManagerWrapper(VillagePlace poiManager) {
+    VillageManagerWrapper(PoiManager poiManager) {
         this.poiManager = poiManager;
     }
 
     @Override
     public void add(AbstractBlockPositionWrapper blockPos, AbstractPoiTypeWrapper poiType) {
-        poiManager.a(((BlockPositionWrapper) blockPos).blockPos, ((PoiTypeWrapper) poiType).poiType);
+        poiManager.add(((BlockPositionWrapper) blockPos).blockPos, ((PoiTypeWrapper) poiType).poiType);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class VillageManagerWrapper implements AbstractVillageManagerWrapper {
             @Nonnull Predicate<? super AbstractBlockPositionWrapper> blockPosPred,
             AbstractBlockPositionWrapper blockPos,
             int d) {
-        Optional<BlockPosition> res = poiManager.a(poiType -> poiPred.test(new PoiTypeWrapper(poiType)),
+        Optional<BlockPos> res = poiManager.take(poiType -> poiPred.test(new PoiTypeWrapper(poiType)),
                 pos -> blockPosPred.test(new BlockPositionWrapper(pos)),
                 ((BlockPositionWrapper) blockPos).blockPos, d);
         return res.map(BlockPositionWrapper::new);
@@ -37,7 +37,7 @@ public class VillageManagerWrapper implements AbstractVillageManagerWrapper {
 
     @Override
     public void remove(AbstractBlockPositionWrapper blockPos) {
-        poiManager.a(((BlockPositionWrapper) blockPos).blockPos);
+        poiManager.remove(((BlockPositionWrapper) blockPos).blockPos);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import static java.util.Objects.requireNonNull;
 
@@ -6,16 +6,16 @@ import javax.annotation.Nonnull;
 
 import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
 
-import net.minecraft.core.BlockPosition;
+import net.minecraft.core.BlockPos;
 
 public class BlockPositionWrapper implements AbstractBlockPositionWrapper {
-    final BlockPosition blockPos;
+    final BlockPos blockPos;
 
     public BlockPositionWrapper(double x, double y, double z) {
-        this.blockPos = new BlockPosition(x, y, z);
+        this.blockPos = new BlockPos(x, y, z);
     }
 
-    BlockPositionWrapper(@Nonnull BlockPosition blockPos) {
+    BlockPositionWrapper(@Nonnull BlockPos blockPos) {
         requireNonNull(blockPos);
         this.blockPos = blockPos;
     }

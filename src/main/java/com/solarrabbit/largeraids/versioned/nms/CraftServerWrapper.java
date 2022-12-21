@@ -1,9 +1,9 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import com.solarrabbit.largeraids.nms.AbstractCraftServerWrapper;
 
 import org.bukkit.Server;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
 
 public class CraftServerWrapper extends AbstractCraftServerWrapper {
 

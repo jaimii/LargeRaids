@@ -1,4 +1,4 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import com.solarrabbit.largeraids.nms.AbstractMinecraftServerWrapper;
 
@@ -13,6 +13,6 @@ public class MinecraftServerWrapper implements AbstractMinecraftServerWrapper {
 
     @Override
     public String getServerVersion() {
-        return server.G();
+        return server.getServerVersion();
     }
 }

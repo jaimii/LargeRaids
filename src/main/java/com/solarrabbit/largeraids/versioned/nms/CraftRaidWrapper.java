@@ -1,4 +1,4 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -8,7 +8,7 @@ import com.solarrabbit.largeraids.nms.AbstractCraftRaidWrapper;
 import com.solarrabbit.largeraids.nms.AbstractRaidWrapper;
 
 import org.bukkit.Raid;
-import org.bukkit.craftbukkit.v1_18_R2.CraftRaid;
+import org.bukkit.craftbukkit.v1_19_R1.CraftRaid;
 
 public class CraftRaidWrapper extends AbstractCraftRaidWrapper {
     private static MethodHandle handle;

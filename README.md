@@ -21,7 +21,7 @@ This is a fork of the original LargeRaids plugin, updated to 1.19.2. This versio
 
 ## Installation
 
-This fork now uses Paper's gradle build system. Run 'gradlew build' to generate the output JARs.
+This fork now uses Paper's gradle build system. Run 'gradlew build' to generate the output JARs. If you wish to import this project into your IDE, import it as a gradle project after you've run the command.
 
 Even though the build now uses Paper, Spigot will still be supported.
 

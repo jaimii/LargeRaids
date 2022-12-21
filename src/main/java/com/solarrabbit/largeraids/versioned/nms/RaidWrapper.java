@@ -1,4 +1,4 @@
-package com.solarrabbit.largeraids.v1_18_R2.nms;
+package com.solarrabbit.largeraids.versioned.nms;
 
 import java.util.Set;
 import java.util.UUID;
@@ -27,27 +27,27 @@ public class RaidWrapper implements AbstractRaidWrapper {
 
     @Override
     public void stop() {
-        raid.n();
+        raid.stop();
     }
 
     @Override
     public boolean isBetweenWaves() {
-        return raid.b();
+        return raid.isBetweenWaves();
     }
 
     @Override
     public boolean hasFirstWaveSpawned() {
-        return raid.c();
+        return raid.hasFirstWaveSpawned();
     }
 
     @Override
     public void setBadOmenLevel(int level) {
-        this.raid.a(level);
+        this.raid.setBadOmenLevel(level);
     }
 
     @Override
     public int getGroupsSpawned() {
-        return this.raid.k();
+        return this.raid.getGroupsSpawned();
     }
 
     @Override
@@ -62,23 +62,23 @@ public class RaidWrapper implements AbstractRaidWrapper {
     @Override
     public void joinRaid(int i, AbstractRaiderWrapper raider, @Nullable AbstractBlockPositionWrapper blockPosition,
             boolean flag) {
-        raid.a(i, ((RaiderWrapper) raider).raider,
+        raid.joinRaid(i, ((RaiderWrapper) raider).raider,
                 blockPosition == null ? null : ((BlockPositionWrapper) blockPosition).blockPos, flag);
     }
 
     @Override
     public boolean addWaveMob(int wave, AbstractRaiderWrapper raider, boolean flag) {
-        return this.raid.a(wave, ((RaiderWrapper) raider).raider, flag);
+        return this.raid.addWaveMob(wave, ((RaiderWrapper) raider).raider, flag);
     }
 
     @Override
     public void removeFromRaid(AbstractRaiderWrapper raider, boolean flag) {
-        this.raid.a(((RaiderWrapper) raider).raider, flag);
+        this.raid.removeFromRaid(((RaiderWrapper) raider).raider, flag);
     }
 
     @Override
     public Set<UUID> getHeroesOfTheVillage() {
-        return this.raid.C;
+        return this.raid.heroesOfTheVillage;
     }
 
     @Override
@@ -92,6 +92,6 @@ public class RaidWrapper implements AbstractRaidWrapper {
 
     @Override
     public boolean isActive() {
-        return raid.v();
+        return raid.isActive();
     }
 }
