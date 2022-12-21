@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.versioned.nms;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -21,16 +22,16 @@ public class VillageManagerWrapper implements AbstractVillageManagerWrapper {
 
     @Override
     public void add(AbstractBlockPositionWrapper blockPos, AbstractPoiTypeWrapper poiType) {
-        poiManager.add(((BlockPositionWrapper) blockPos).blockPos, ((PoiTypeWrapper) poiType).poiType);
+        poiManager.add(((BlockPositionWrapper) blockPos).blockPos, ((PoiTypeWrapper) poiType).poiTypeHolder);
     }
 
     @Override
     public Optional<BlockPositionWrapper> take(@Nonnull Predicate<? super AbstractPoiTypeWrapper> poiPred,
-            @Nonnull Predicate<? super AbstractBlockPositionWrapper> blockPosPred,
+            @Nonnull BiPredicate<? super AbstractPoiTypeWrapper, ? super AbstractBlockPositionWrapper> blockPosPred,
             AbstractBlockPositionWrapper blockPos,
             int d) {
-        Optional<BlockPos> res = poiManager.take(poiType -> poiPred.test(new PoiTypeWrapper(poiType)),
-                pos -> blockPosPred.test(new BlockPositionWrapper(pos)),
+        Optional<BlockPos> res = poiManager.take(poiTypeHolder -> poiPred.test(new PoiTypeWrapper(poiTypeHolder)),
+                (poiTypeHolder, pos) -> blockPosPred.test(new PoiTypeWrapper(poiTypeHolder), new BlockPositionWrapper(pos)),
                 ((BlockPositionWrapper) blockPos).blockPos, d);
         return res.map(BlockPositionWrapper::new);
     }

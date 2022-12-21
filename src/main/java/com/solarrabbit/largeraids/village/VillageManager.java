@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
 import com.solarrabbit.largeraids.nms.AbstractPoiTypeWrapper;
+import com.solarrabbit.largeraids.nms.AbstractProfessionWrapper;
 import com.solarrabbit.largeraids.nms.AbstractVillageManagerWrapper;
 import com.solarrabbit.largeraids.nms.AbstractWorldServerWrapper;
 import com.solarrabbit.largeraids.util.VersionUtil;
@@ -11,13 +12,14 @@ import com.solarrabbit.largeraids.util.VersionUtil;
 import org.bukkit.Location;
 
 public class VillageManager {
+    private static final AbstractProfessionWrapper PROFESSION_TYPE = VersionUtil.getMasonProfessionWrapper();
     private static final AbstractPoiTypeWrapper JOB_TYPE = VersionUtil.getMasonPoiTypeWrapper();
 
     public boolean addVillage(@Nonnull Location location) {
         AbstractBlockPositionWrapper blockPos = VersionUtil.getBlockPositionWrapper(location);
         AbstractVillageManagerWrapper villageRecordManager = getManager(location);
         villageRecordManager.add(blockPos, JOB_TYPE);
-        return villageRecordManager.take(JOB_TYPE.getPredicate(), pos -> pos.equals(blockPos), blockPos, 1).isPresent();
+        return villageRecordManager.take(PROFESSION_TYPE.getPredicate(), (poiTypeHolder, pos) -> pos.equals(blockPos), blockPos, 1).isPresent();
     }
 
     public void removeVillage(@Nonnull Location location) {

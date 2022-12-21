@@ -1,17 +1,7 @@
 package com.solarrabbit.largeraids.util;
 
 import com.mojang.authlib.GameProfile;
-import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
-import com.solarrabbit.largeraids.nms.AbstractCraftRaidWrapper;
-import com.solarrabbit.largeraids.nms.AbstractCraftRaiderWrapper;
-import com.solarrabbit.largeraids.nms.AbstractCraftServerWrapper;
-import com.solarrabbit.largeraids.nms.AbstractCraftVexWrapper;
-import com.solarrabbit.largeraids.nms.AbstractCraftWorldWrapper;
-import com.solarrabbit.largeraids.nms.AbstractMinecraftServerWrapper;
-import com.solarrabbit.largeraids.nms.AbstractPlayerEntityWrapper;
-import com.solarrabbit.largeraids.nms.AbstractPoiTypeWrapper;
-import com.solarrabbit.largeraids.nms.AbstractRaidWrapper;
-import com.solarrabbit.largeraids.nms.AbstractWorldServerWrapper;
+import com.solarrabbit.largeraids.nms.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -56,6 +46,10 @@ public class VersionUtil {
             AbstractWorldServerWrapper world,
             GameProfile profile) {
     	return new com.solarrabbit.largeraids.versioned.nms.PlayerEntityWrapper(server, world, profile, null);
+    }
+
+    public static AbstractProfessionWrapper getMasonProfessionWrapper() {
+    	return com.solarrabbit.largeraids.versioned.nms.ProfessionWrapper.MASON;
     }
 
     public static AbstractPoiTypeWrapper getMasonPoiTypeWrapper() {
