@@ -30,3 +30,13 @@ jobs:
         with:
           name: LargeRaids
           path: build/libs/
+          
+      - name: Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.RELEASE_VERSION }}"
+          prerelease: false
+          title: "v${{ env.RELEASE_VERSION }}"
+          files: |
+            build/libs/LargeRaids-1.0.jar

@@ -1,6 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
   `java-library`
   id("io.papermc.paperweight.userdev") version "1.3.11"
+  id ("com.github.johnrengelman.shadow") version "7.0.0"
   //id("xyz.jpenilla.run-paper") version "2.0.0" // Adds runServer and runMojangMappedServer tasks for testing
   //id("net.minecrell.plugin-yml.bukkit") version "0.5.2" // Generates plugin.yml
 }
@@ -19,9 +22,13 @@ repositories {
   maven("https://mvn.lumine.io/repository/maven-public/")
 }
 
+tasks.withType<ShadowJar> {
+  configurations = listOf(project.configurations.shadow.get())
+}
+
 dependencies {
   paperDevBundle("1.19.2-R0.1-SNAPSHOT")
-  implementation("org.bstats:bstats-bukkit:2.0.1")
+  shadow("org.bstats:bstats-bukkit:2.0.1")
   implementation("me.clip:placeholderapi:2.11.1")
   implementation("io.lumine:Mythic-Dist:5.2.0-SNAPSHOT")
   // paperweightDevBundle("com.example.paperfork", "1.19.2-R0.1-SNAPSHOT")
