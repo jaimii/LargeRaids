@@ -16,12 +16,12 @@ java {
 
 repositories {
   maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-  maven("https://nexus.phoenixdvpt.fr/repository/maven-public/")
   maven("https://mvn.lumine.io/repository/maven-public/")
 }
 
 dependencies {
   paperDevBundle("1.19.2-R0.1-SNAPSHOT")
+  implementation("org.bstats:bstats-bukkit:2.0.1")
   implementation("me.clip:placeholderapi:2.11.1")
   implementation("io.lumine:Mythic-Dist:5.2.0-SNAPSHOT")
   // paperweightDevBundle("com.example.paperfork", "1.19.2-R0.1-SNAPSHOT")
