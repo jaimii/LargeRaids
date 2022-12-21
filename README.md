@@ -9,9 +9,11 @@
 
 **LargeRaids** is a vanilla Spigot game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which are added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulty, higher bad omen levels, more raiders, more waves and higher rewards.
 
+This is a fork of the original LargeRaids plugin, updated to 1.19.2. This version will ONLY support 1.19.2.
+
 ## Server Requirements
 
-- Version: 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.1
+- Version: 1.19.2
 
 ## Statistics
 
@@ -19,13 +21,9 @@
 
 ## Installation
 
-If you wish to install the repository locally, you might want to first install the [remapped jars](https://www.spigotmc.org/threads/spigot-bungeecord-1-17-1-17-1.510208/#:~:text=In%20order%20to%20assist%20developers%20with%20the%20transition%20we%20have%20added%20an%20additional%20option%20to%20BuildTools%2C%20%2D%2Dremapped) for versions 1.17.1 and 1.18 via [BuildTools](https://hub.spigotmc.org/jenkins/job/BuildTools/). Afterwhich, follow these steps to ensure that the project builds correctly.
+This fork now uses Paper's gradle build system. Run 'gradlew build' to generate the output JARs.
 
-1. Open up Terminal
-2. Change to any desired directories for cloning the repository
-3. Run `git clone https://github.com/zhenghanlee/LargeRaids.git`
-4. Run `cd ./LargeRaids` to head into the project directory
-5. Run `mvn install` to install the project locally and build the jar file (named `LargeRaids.jar`) in `target` folder
+Even though the build now uses Paper, Spigot will still be supported.
 
 ## Using the API
 
