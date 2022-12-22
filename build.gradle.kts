@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.solarrabbit"
-version = "1.0"
+version = "1.10.5"
 description = "LargeRaids"
 
 java {
