@@ -22,7 +22,7 @@ public class GiveSummonItemCommand implements CommandExecutor {
             return false;
         Player targetPlayer = Bukkit.getPlayer(args[0]);
         if (targetPlayer == null) {
-            sender.sendMessage(ChatColor.RED + "Cannot find specified player!");
+            sender.sendMessage(ChatColor.RED + this.plugin.getMessage("give-items.cannot-find"));
             return false;
         }
 
@@ -33,12 +33,12 @@ public class GiveSummonItemCommand implements CommandExecutor {
             try {
                 int amount = Integer.parseInt(args[1]);
                 if (amount <= 0)
-                    sender.sendMessage(ChatColor.RED + "Please input positive amount of items...");
+                    sender.sendMessage(ChatColor.RED + this.plugin.getMessage("give-items.need-positive"));
                 else
                     giveItems(sender, targetPlayer, amount);
                 return true;
             } catch (NumberFormatException e) {
-                sender.sendMessage(ChatColor.RED + "Invalid input amount of items...");
+                sender.sendMessage(ChatColor.RED + this.plugin.getMessage("give-items.invalid-number"));
                 return false;
             }
         }
@@ -50,7 +50,7 @@ public class GiveSummonItemCommand implements CommandExecutor {
             inventory.addItem(plugin.getTriggerConfig().getDropInLavaConfig().getItem())
                     .forEach((index, item) -> receiver.getWorld().dropItem(receiver.getLocation(), item));
         }
-        requester.sendMessage(ChatColor.GREEN + "Gave " + receiver.getName() + " " + requestAmount + " summoning "
-                + (requestAmount == 1 ? "item" : "items"));
+        requester.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("give-items.success"),
+        		receiver.getName(), requestAmount, requestAmount == 1 ? "" : "s"));
     }
 }

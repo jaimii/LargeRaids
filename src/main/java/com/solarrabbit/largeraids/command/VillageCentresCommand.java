@@ -54,9 +54,11 @@ public class VillageCentresCommand implements CommandExecutor {
                 return true;
             case "show":
                 show();
+                sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("village-centers.show.success"));
                 return true;
             case "hide":
                 hide();
+                sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("village-centers.hide.success"));
                 return true;
             default:
                 return false;
@@ -119,6 +121,7 @@ public class VillageCentresCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.YELLOW + this.plugin.getMessage("village-centers.list.no-exist"));
             return;
         }
+        sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("village-centers.list.list-all"));
         map.forEach((str, loc) -> sender.spigot().sendMessage(getClickableComponent(str, loc)));
     }
 

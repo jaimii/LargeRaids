@@ -2,6 +2,12 @@ config:
   invalid-mob-array-length: The length of the arrays under the `mobs` configuration section below must be at least the number of waves!
   zero-raider-wave: Each wave must have at least one raider!
 
+give-items:
+  cannot-find: Cannot find specified player!
+  need-positive: Please input positive amount of items...
+  invalid-number: Invalid number of items...
+  success: Gave %s %d summoning item%s
+
 village-centers:
   add:
     already-exist: There is already an artificial village center of the same name!
@@ -10,8 +16,13 @@ village-centers:
   remove:
     no-exist: There are no existing artificial village centers with that name!
     remove-success: Successfully removed an artificial village center!
+  show:
+    success: All artificial village centers will now be shown with particle effects.
+  hide:
+    success: All artificial village centers will no longer be shown with particle effects.
   list:
     no-exist: There are no existing artificial village centers!
+    list-all: All existing artificial village centers are listed below.
   database:
     add-fail: The artificial village center might not have been added properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.
     remove-fail: The artificial village center might not have been removed properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.

@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.PluginLogger.Level;
 import com.solarrabbit.largeraids.raid.mob.Bomber;
 import com.solarrabbit.largeraids.raid.mob.FireworkPillager;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
@@ -71,6 +72,8 @@ public class RaiderConfig {
         loadCustomRaiders();
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null)
             loadMythicRaiders();
+        else
+        	JavaPlugin.getPlugin(LargeRaids.class).log("You do not have MythicMobs installed, some mobs will not work!", Level.WARN);
     }
 
     private void loadVanillaRaiders() {

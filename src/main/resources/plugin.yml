@@ -1,6 +1,6 @@
 main: com.solarrabbit.largeraids.LargeRaids
 name: LargeRaids
-version: '${project.version}'
+version: 1.10.5
 author: SolarRabbit
 api-version: 1.14
 
@@ -30,7 +30,7 @@ commands:
     usage: /<command> [add | remove | show | hide] [name]
     permission: largeraids.centers
   lrglow:
-    description: Outline all raiders in the current raid.
+    description: Outlines all raiders in the current raid.
     permission: largeraids.glow
 
 permissions:
