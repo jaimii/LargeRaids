@@ -70,10 +70,10 @@ public class RaiderConfig {
     private void init() {
         loadVanillaRaiders();
         loadCustomRaiders();
-        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null)
+        if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
+        	JavaPlugin.getPlugin(LargeRaids.class).log("MythicMobs intergration enabled.", Level.INFO);
             loadMythicRaiders();
-        else
-        	JavaPlugin.getPlugin(LargeRaids.class).log("You do not have MythicMobs installed, some mobs will not work!", Level.WARN);
+        }
     }
 
     private void loadVanillaRaiders() {

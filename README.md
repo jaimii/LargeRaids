@@ -23,7 +23,7 @@ This is a fork of the original LargeRaids plugin, updated to 1.19.2. This versio
 
 This fork now uses Paper's gradle build system. Run 'gradlew build' to generate the output JARs. If you wish to import this project into your IDE, import it as a gradle project after you've run the command.
 
-Even though the build now uses Paper, Spigot will still be supported.
+You should use Paper to run your server, as one of the optional extensions (MythicMobs) relies on it.
 
 ## Using the API
 
