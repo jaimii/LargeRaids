@@ -155,7 +155,9 @@ public class RaidManager implements Listener {
 
     private void tick() {
         for (LargeRaid largeRaid : currentRaids)
-            if (largeRaid.isActive() && largeRaid.getTotalRaidersAlive() == 0 && !largeRaid.isLoading()
+        	// Each vanilla raid is supposed to spawn one wave, before being replaced by another instance of raid.
+        	// If the first wave has spawned and all raiders are dead, this indicates that it is time to trigger the next wave.
+            if (largeRaid.isActive() && largeRaid.getTotalRaidersAlive() == 0 && largeRaid.firstWaveSpawned()
                     && !largeRaid.isLastWave()) {
                 setIdle();
                 largeRaid.triggerNextWave();

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 public class ReloadPluginCommand implements CommandExecutor {
-    private LargeRaids plugin;
+    private final LargeRaids plugin;
 
     public ReloadPluginCommand(LargeRaids plugin) {
         this.plugin = plugin;

@@ -281,6 +281,16 @@ public class LargeRaid {
     }
 
     /**
+     * Returns whether the <b>vanilla raid instance</b> has spawned at least once.
+     * 
+     * @return {@code true} if wave is loading
+     */
+    public boolean firstWaveSpawned() {
+        AbstractRaidWrapper nmsRaid = getCurrentNMSRaid();
+        return nmsRaid.hasFirstWaveSpawned();
+    }
+
+    /**
      * Returns the number of raiders in the raid who are alive.
      *
      * @return number of alive raiders

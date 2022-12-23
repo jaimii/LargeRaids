@@ -7,9 +7,11 @@
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/zhenghanlee/LargeRaids)](https://img.shields.io/github/commit-activity/m/zhenghanlee/LargeRaids)
 [![Discord](https://img.shields.io/discord/846941711741222922.svg?logo=discord)](https://discord.gg/YSv7pptDjE)
 
-**LargeRaids** is a vanilla Spigot game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which are added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulty, higher bad omen levels, more raiders, more waves and higher rewards.
+**LargeRaids** is a vanilla game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which were added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulties, higher bad omen levels, more raiders, more waves and better rewards.
 
 This is a fork of the original LargeRaids plugin, updated to 1.19.2. This version will ONLY support 1.19.2.
+
+This plugin will work for both Spigot and Paper, but the latter is recommended because one of the optional extensions (MythicMobs) relies on it.
 
 ## Server Requirements
 
@@ -22,8 +24,6 @@ This is a fork of the original LargeRaids plugin, updated to 1.19.2. This versio
 ## Installation
 
 This fork now uses Paper's gradle build system. Run 'gradlew build' to generate the output JARs. If you wish to import this project into your IDE, import it as a gradle project after you've run the command.
-
-You should use Paper to run your server, as one of the optional extensions (MythicMobs) relies on it.
 
 ## Using the API
 
