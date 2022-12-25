@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.raid;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,10 +31,13 @@ import org.bukkit.event.raid.RaidFinishEvent;
 import org.bukkit.event.raid.RaidSpawnWaveEvent;
 import org.bukkit.event.raid.RaidStopEvent;
 import org.bukkit.event.raid.RaidTriggerEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
 public class RaidManager implements Listener {
     public final Set<LargeRaid> currentRaids = new HashSet<>();
+    public final Set<AbstractRaidWrapper> outlinedRaids = new HashSet<>();
     private final LargeRaids plugin;
     private boolean isIdle;
 
@@ -154,6 +158,7 @@ public class RaidManager implements Listener {
     }
 
     private void tick() {
+    	PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
         for (LargeRaid largeRaid : currentRaids)
         	// Each vanilla raid is supposed to spawn one wave, before being replaced by another instance of raid.
         	// If the first wave has spawned and all raiders are dead, this indicates that it is time to trigger the next wave.
@@ -162,7 +167,19 @@ public class RaidManager implements Listener {
                 setIdle();
                 largeRaid.triggerNextWave();
                 setActive();
-            }
+            } else if (largeRaid.areRaidersOutlined())
+            	largeRaid.applyGlowing();
+        
+        Iterator<AbstractRaidWrapper> itr = outlinedRaids.iterator();
+        while (itr.hasNext()) {
+        	AbstractRaidWrapper wrapper = itr.next();
+        	Raid raid = VersionUtil.getCraftRaidWrapper(wrapper).getRaid();
+        	
+        	if (raid.getStatus() != RaidStatus.ONGOING)
+        		itr.remove();
+        	else
+        		raid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
+        }
     }
 
     public Optional<LargeRaid> getLargeRaid(Location location) {

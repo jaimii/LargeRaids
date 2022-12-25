@@ -18,8 +18,8 @@ commands:
     description: Skip the current wave.
     permission: largeraids.skip
   lrstop:
-    description: Stop a large raid.
-    usage: /<command> [player]
+    description: Stops a large raid.
+    usage: /<command> <player>
     permission: largeraids.stop
   lrgive:
     description: Give a player the summoning item.
@@ -30,7 +30,8 @@ commands:
     usage: /<command> [add | remove | show | hide] [name]
     permission: largeraids.centers
   lrglow:
-    description: Outlines all raiders in the current raid.
+    description: Outlines all raiders in the current raid, either with an interval or permanently.
+    usage: /<command> toggle, /<command> [duration_seconds] 
     permission: largeraids.glow
 
 permissions:

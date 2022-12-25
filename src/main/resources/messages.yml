@@ -6,7 +6,7 @@ give-items:
   cannot-find: Cannot find specified player!
   need-positive: Please input positive amount of items...
   invalid-number: Invalid number of items...
-  success: Gave %s %d summoning item%s
+  success: Gave %s %d summoning item%s.
 
 village-centers:
   add:
@@ -26,3 +26,13 @@ village-centers:
   database:
     add-fail: The artificial village center might not have been added properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.
     remove-fail: The artificial village center might not have been removed properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.
+    
+outline-raiders:
+  need-positive: Duration must be a positive number!
+  no-raid-exists: No raid exists at your location!
+  no-raiders: No raiders were detected in your current raid!
+  raiders-outlined: All current raiders were outlined for %s second%s.
+  toggle-outlines-large-false: The large raid you are in will no longer have its raiders outlined.
+  toggle-outlines-large-true: The large raid you are in will have all its raiders outlined.
+  toggle-outlines-false: The raid you are in will no longer have its raiders outlined.
+  toggle-outlines-true: The raid you are in will have all its raiders outlined.

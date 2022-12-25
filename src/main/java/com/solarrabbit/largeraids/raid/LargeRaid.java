@@ -58,6 +58,7 @@ public class LargeRaid {
     private int omenLevel;
     private Raid currentRaid;
     private int currentWave;
+    private boolean raidersOutlined;
 
     /**
      * Constructs a large raid object.
@@ -220,6 +221,14 @@ public class LargeRaid {
         if (sound != null)
             playSoundToPlayersInRadius(sound);
     }
+    
+    /**
+     * Applies the glowing effect to all raiders.
+     */
+    public void applyGlowing() {
+    	PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
+    	currentRaid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
+    }
 
     /**
      * Returns the center of the raid.
@@ -267,6 +276,14 @@ public class LargeRaid {
 
     public boolean isActive() {
         return getCurrentNMSRaid().isActive();
+    }
+    
+    public boolean areRaidersOutlined() {
+    	return raidersOutlined;
+    }
+    
+    public void setRaidersOutlined(boolean raidersOutlined) {
+    	this.raidersOutlined = raidersOutlined;
     }
 
     /**

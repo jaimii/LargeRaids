@@ -22,6 +22,20 @@ public abstract class RaidersOutliner {
     private static final int INNER_RADIUS = 32;
 
     /**
+     * Outlines all raiders within the raid right away.
+     *
+     * @param raid     that the raiders to be outlined are in
+     * @param duration in ticks
+     */
+    protected void outlineAllRaidersImmediately(Raid raid, int duration) {
+        List<Raider> raiders = raid.getRaiders();
+        if (raiders.isEmpty())
+            return;
+        PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, duration, 0);
+        raiders.forEach(raider -> raider.addPotionEffect(effect));
+    }
+    
+    /**
      * Outlines all raiders within the raid after a default number of ticks that is
      * used in vanilla after resonate sound plays.
      *
