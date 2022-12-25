@@ -33,6 +33,9 @@ commands:
     description: Outlines all raiders in the current raid, either with an interval or permanently.
     usage: /<command> toggle, /<command> [duration_seconds] 
     permission: largeraids.glow
+  lrshow:
+    description: Displays the current wave of the raid.
+    permission: largeraids.show
 
 permissions:
   largeraids.*:
@@ -46,6 +49,7 @@ permissions:
       largeraids.give: true
       largeraids.centers: true
       largeraids.glow: true
+      largeraids.show: true
   largeraids.reload:
     description: Allow access to lrreload command.
     default: op
@@ -66,4 +70,7 @@ permissions:
     default: op
   largeraids.glow:
     description: Allow access to lrglow command.
+    default: op
+  largeraids.show:
+    description: Allow access to lrshow command.
     default: op

@@ -21,6 +21,8 @@ public interface AbstractRaidWrapper {
 
     void setBadOmenLevel(int level);
 
+    int getTotalGroups();
+
     int getGroupsSpawned();
 
     void setGroupsSpawned(int groupsSpawned);

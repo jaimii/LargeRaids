@@ -46,6 +46,11 @@ public class RaidWrapper implements AbstractRaidWrapper {
     }
 
     @Override
+    public int getTotalGroups() {
+    	return this.raid.numGroups;
+    }
+
+    @Override
     public int getGroupsSpawned() {
         return this.raid.getGroupsSpawned();
     }
@@ -88,6 +93,11 @@ public class RaidWrapper implements AbstractRaidWrapper {
         } else {
             return false;
         }
+    }
+    
+    @Override
+    public int hashCode() {
+    	return this.raid.hashCode();
     }
 
     @Override

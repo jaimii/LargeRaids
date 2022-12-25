@@ -1,6 +1,32 @@
+sender-player: This command must be executed by an in-game player!
+
 config:
   invalid-mob-array-length: The length of the arrays under the `mobs` configuration section below must be at least the number of waves!
   zero-raider-wave: Each wave must have at least one raider!
+
+start-raid:
+  player-not-found: The player you inputted was not found!
+  no-village-centers: There are no existing artificial village centers with that name!
+  village-center-world-missing: Specified artificial village center's world is missing!
+  started-at: A large raid was started at (%d, %d, %d).
+  specify-player: You must specify a player name if you wish to run this as a non-player!
+
+skip-wave:
+  no-large-raid: No large raid exists at your current location!
+  last-wave: The raid is now in its last wave. If you want to stop the raid, use /lrstop instead!
+  skip-success: Successfully skipped wave %d. There are %d total waves.
+  
+stop-raid:
+  player-not-found: The player you inputted was not found!
+  no-large-raid: No large raid was found at (%d, %d, %d)!
+  stopped-raid: The large raid at (%d, %d, %d) was stopped.
+  specify-player: You must specify a player name if you wish to run this as a non-player!
+  
+view-wave:
+  no-raid-exists: No raid exists at your location!
+  large-raid: It is currently wave %d out of %d for the current large raid.
+  normal-raid: It is currently wave %d out of %d for the current raid.
+  bonus-wave: All %s waves have spawned, the raid is currently on the bonus wave.
 
 give-items:
   cannot-find: Cannot find specified player!

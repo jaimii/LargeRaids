@@ -28,33 +28,38 @@ public class StartRaidCommand extends Trigger implements CommandExecutor {
                     Player player = Bukkit.getPlayer(args[1]);
                     location = player == null ? null : player.getLocation();
                     if (location == null) {
-                        sender.sendMessage(
-                                ChatColor.RED + "Cannot find specified player!");
+                        sender.sendMessage(ChatColor.RED + this.plugin.getMessage("start-raid.player-not-found"));
                         return false;
                     }
                     break;
                 case "center":
                     location = plugin.getDatabaseAdapter().getCentre(args[1]);
                     if (location == null) {
-                        sender.sendMessage(
-                                ChatColor.RED + "There are no existing artificial village centers with that name!");
+                        sender.sendMessage(ChatColor.RED + this.plugin.getMessage("start-raid.no-village-centers"));
                         return false;
                     } else if (location.getWorld() == null) {
-                        sender.sendMessage(ChatColor.RED + "Specified artificial village center's world is missing!");
+                        sender.sendMessage(ChatColor.RED + this.plugin.getMessage("start-raid.village-center-world-missing"));
                         return false;
                     }
                     break;
                 default:
                     return false;
             }
+            sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("start-raid.started-at"),
+        			location.getBlockX(), location.getBlockY(), location.getBlockZ()));
             triggerRaid(sender, location);
             return true;
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
-            triggerRaid(sender, player.getLocation());
+            Location location = player.getLocation();
+            sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("start-raid.started-at"),
+            		location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            triggerRaid(sender, location);
             return true;
-        } else
-            return false;
+        }
+        if (!(sender instanceof Player))
+        	sender.sendMessage(ChatColor.RED + this.plugin.getMessage("start-raid.specify-player"));
+        return false;
     }
 
     @Override

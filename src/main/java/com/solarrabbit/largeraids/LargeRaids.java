@@ -6,13 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.solarrabbit.largeraids.PluginLogger.Level;
-import com.solarrabbit.largeraids.command.GiveSummonItemCommand;
-import com.solarrabbit.largeraids.command.OutlineRaidersCommand;
-import com.solarrabbit.largeraids.command.ReloadPluginCommand;
-import com.solarrabbit.largeraids.command.SkipWaveCommand;
-import com.solarrabbit.largeraids.command.StartRaidCommand;
-import com.solarrabbit.largeraids.command.StopRaidCommand;
-import com.solarrabbit.largeraids.command.VillageCentresCommand;
+import com.solarrabbit.largeraids.command.*;
 import com.solarrabbit.largeraids.command.completer.StartRaidCommandCompleter;
 import com.solarrabbit.largeraids.command.completer.VillageCentersCommandCompleter;
 import com.solarrabbit.largeraids.config.MiscConfig;
@@ -125,8 +119,9 @@ public final class LargeRaids extends JavaPlugin {
     private void loadCommands() {
         getCommand("lrstart").setExecutor(new StartRaidCommand(this));
         getCommand("lrstart").setTabCompleter(new StartRaidCommandCompleter(db));
-        getCommand("lrskip").setExecutor(new SkipWaveCommand(raidManager));
+        getCommand("lrskip").setExecutor(new SkipWaveCommand(this));
         getCommand("lrstop").setExecutor(new StopRaidCommand(this));
+        getCommand("lrshow").setExecutor(new ShowCurrentWaveCommand(this));
         getCommand("lrgive").setExecutor(new GiveSummonItemCommand(this));
         getCommand("lrreload").setExecutor(new ReloadPluginCommand(this));
         getCommand("lrcenters").setExecutor(new VillageCentresCommand(this));

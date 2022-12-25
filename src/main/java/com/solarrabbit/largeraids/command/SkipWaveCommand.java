@@ -1,6 +1,10 @@
 package com.solarrabbit.largeraids.command;
 
+import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.raid.LargeRaid;
 import com.solarrabbit.largeraids.raid.RaidManager;
+
+import java.util.Optional;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,28 +14,36 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SkipWaveCommand implements CommandExecutor {
+	private final LargeRaids plugin;
     private final RaidManager manager;
-    private static final String LAST_WAVE_MESSAGE = ChatColor.GOLD + "The raid is now in its last wave. "
-            + "If you want to stop the raid, use /lrstop instead!";
 
-    public SkipWaveCommand(RaidManager manager) {
-        this.manager = manager;
+    public SkipWaveCommand(LargeRaids plugin) {
+        this.plugin = plugin;
+        manager = plugin.getRaidManager();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player))
+        if (!(sender instanceof Player)) {
+        	sender.sendMessage(ChatColor.RED + this.plugin.getMessage("sender-player"));
             return false;
+        }
+        
         Location loc = ((Player) sender).getLocation();
-        manager.getLargeRaid(loc).ifPresent(raid -> {
-            if (raid.isLastWave()) {
-                sender.sendMessage(LAST_WAVE_MESSAGE);
-                return;
+        Optional<LargeRaid> raid = manager.getLargeRaid(loc);
+        if (raid.isPresent()) {
+        	if (raid.get().isLastWave()) {
+                sender.sendMessage(ChatColor.GOLD + this.plugin.getMessage("skip-wave.last-wave"));
+                return true;
             }
             manager.setIdle();
-            raid.skipWave();
+            raid.get().skipWave();
             manager.setActive();
-        });
+        	sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("skip-wave.skip-success"),
+        			raid.get().getCurrentWave() - 1, raid.get().getTotalWaves()));
+        	return true;
+        }
+        sender.sendMessage(ChatColor.RED + this.plugin.getMessage("skip-wave.no-large-raid"));
         return true;
     }
 
