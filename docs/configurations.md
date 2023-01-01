@@ -10,6 +10,7 @@ title: Configurations
 - [**Trigger Mechanism**](#trigger-mechanism)
 - [**Placeholder**](#placeholder)
 - [**Miscellaneous**](#miscellaneous)
+- [**Custom Mobs**](#custom-mobs)
 - [**Summary**](#summary)
 
 The only configuration file available is the default `config.yml` generated the first time the plugin is loaded on the server. In the future versions to come, new configurable options may be added. The already generated `config.yml` does not get automatically updated. You can either backup the old configuration file in a different directory for the plugin to regenerate a new one, or update it manually according to the changes reflected below.
@@ -211,6 +212,33 @@ miscellaneous:
     duration: 5
 ```
 
+## Custom Mobs
+
+```yml
+custom-mobs:
+  firework-pillager:
+    # The health the firework pillager will spawn with.
+    health: 48.0
+  bomber:
+    # The explosive power of the explosion directly spawned by the bomber.
+    bomber-explosive-power: 1.0
+    # The explosive power of the explosion created by the TNT dropped by the vex.
+    tnt-explosive-power: 1.5
+    # The number of ticks after the TNT spawns before it explodes.
+    primed-tnt-ticks: 20
+  king-raider:
+    # The health of the ravager entity the king is riding.
+    ravager-health: 300.0
+    # The damage done by each ravager attack.
+    ravager-damage: 48.0
+    # The damage done by the king's fangs.
+    fang-damage: 6.0
+    # The number of ticks the entity is on fire after each fang attack.
+    fire-ticks: 140
+    # The regen effect amplifier the ravager should have. Set to -1 to disable.
+    regen-level: 4
+```
+
 ## Summary
 
 This is a summary of what the full document should look like with proper indentation.
@@ -302,4 +330,18 @@ miscellaneous:
     normal-raid: false
     large-raid: false
     duration: 5
+
+custom-mobs:
+  firework-pillager:
+    health: 48.0
+  bomber:
+    bomber-explosive-power: 1.0
+    tnt-explosive-power: 1.5
+    primed-tnt-ticks: 20
+  king-raider:
+    ravager-health: 300.0
+    ravager-damage: 48.0
+    fang-damage: 6.0
+    fire-ticks: 140
+    regen-level: 4
 ```

@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
 import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
 import com.solarrabbit.largeraids.util.VersionUtil;
 
@@ -39,21 +40,32 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class KingRaiderManager implements BossRaiderManager, Listener {
-    private static final double RAVAGER_MAX_HEALTH = 300;
-    private static final double RAVAGER_ATTACK_DAMAGE = 48;
-    private static final double FANG_DAMAGE = 6;
-    private static final int FIRE_TICK = 7 * 20;
+    private double ravagerHealth;
+    private double ravagerDamage;
+    private double fangDamage;
+    private int fireTicks;
+    private int regenLevel;
     private static final EntityType RIDER_TYPE = EntityType.EVOKER;
+
+    @Override
+    public void loadSettings(CustomMobsConfig config) {
+    	ravagerHealth = config.getKingRaiderConfig().getRavagerHealth();
+    	ravagerDamage = config.getKingRaiderConfig().getRavagerDamage();
+    	fangDamage = config.getKingRaiderConfig().getFangDamage();
+    	fireTicks = config.getKingRaiderConfig().getFireTicks();
+    	regenLevel = config.getKingRaiderConfig().getRegenLevel();
+    }
 
     @Override
     public KingRaider spawn(Location location) {
         Ravager ravager = (Ravager) location.getWorld().spawnEntity(location, EntityType.RAVAGER);
         ravager.setCustomName("Juggernaut");
-        ravager.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(RAVAGER_MAX_HEALTH);
-        ravager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(RAVAGER_ATTACK_DAMAGE);
-        ravager.setHealth(RAVAGER_MAX_HEALTH);
+        ravager.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(ravagerHealth);
+        ravager.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ravagerDamage);
+        ravager.setHealth(ravagerHealth);
         ravager.getPersistentDataContainer().set(getJuggernautNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        ravager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 4));
+        if (regenLevel >= 0)
+        	ravager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, regenLevel));
 
         Spellcaster rider = (Spellcaster) location.getWorld().spawnEntity(location, RIDER_TYPE);
         EntityEquipment equipment = rider.getEquipment();
@@ -88,8 +100,8 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         if (evt.getEntity() instanceof Raider)
             return;
         if (isKingFangs((EvokerFangs) evt.getDamager())) {
-            evt.getEntity().setFireTicks(FIRE_TICK);
-            evt.setDamage(FANG_DAMAGE);
+            evt.getEntity().setFireTicks(fireTicks);
+            evt.setDamage(fangDamage);
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.Bomber;
 import com.solarrabbit.largeraids.raid.mob.FireworkPillager;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
@@ -34,6 +35,10 @@ public class MobManagers {
         VanillaRaiderManager vanillaRaiderManager = new VanillaRaiderManager();
         managers.put(VanillaRaider.class, vanillaRaiderManager);
         managers.put(VanillaRiderRaider.class, vanillaRaiderManager);
+    }
+    
+    public void loadSettings(CustomMobsConfig config) {
+    	managers.forEach((c, m) -> m.loadSettings(config));
     }
 
     public MobManager getMobManager(Class<? extends Raider> raiderClass) {

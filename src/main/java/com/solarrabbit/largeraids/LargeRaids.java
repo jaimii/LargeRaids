@@ -13,6 +13,7 @@ import com.solarrabbit.largeraids.config.MiscConfig;
 import com.solarrabbit.largeraids.config.PlaceholderConfig;
 import com.solarrabbit.largeraids.config.RaidConfig;
 import com.solarrabbit.largeraids.config.RewardsConfig;
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.config.trigger.TriggersConfig;
 import com.solarrabbit.largeraids.database.DatabaseAdapter;
 import com.solarrabbit.largeraids.misc.BookGenerator;
@@ -48,6 +49,7 @@ public final class LargeRaids extends JavaPlugin {
     private RewardsConfig rewardsConfig;
     private TriggersConfig triggerConfig;
     private MiscConfig miscConfig;
+    private CustomMobsConfig customMobsConfig;
 
     private Placeholder placeholder;
     private RaidManager raidManager;
@@ -135,6 +137,8 @@ public final class LargeRaids extends JavaPlugin {
         rewardsConfig = new RewardsConfig(getConfig().getConfigurationSection("rewards"));
         triggerConfig = new TriggersConfig(getConfig().getConfigurationSection("trigger"));
         miscConfig = new MiscConfig(getConfig().getConfigurationSection("miscellaneous"));
+        customMobsConfig = new CustomMobsConfig(getConfig().getConfigurationSection("custom-mobs"));
+        mobManagers.loadSettings(customMobsConfig);
         reloadTriggers();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             if (placeholder != null)
@@ -184,6 +188,10 @@ public final class LargeRaids extends JavaPlugin {
 
     public MiscConfig getMiscConfig() {
         return miscConfig;
+    }
+    
+    public CustomMobsConfig getCustomMobsConfig() {
+    	return customMobsConfig;
     }
 
     private void reloadTriggers() {

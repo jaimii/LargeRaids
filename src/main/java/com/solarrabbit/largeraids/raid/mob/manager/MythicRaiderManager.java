@@ -1,5 +1,6 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.MythicRaider;
 
 import org.bukkit.Location;
@@ -12,6 +13,10 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;
 
 public class MythicRaiderManager implements MobManager {
+
+    @Override
+    public void loadSettings(CustomMobsConfig config) {
+    }
 
     public MythicRaider spawn(Location location, MythicMob type) {
         ActiveMob activeMob = type.spawn(BukkitAdapter.adapt(location), 1);

@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
 import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.Bomber;
 import com.solarrabbit.largeraids.util.VersionUtil;
 
@@ -34,9 +35,16 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BomberManager implements CustomRaiderManager, Listener {
-    private static final float BOMBER_EXPLOSIVE_POWER = 1.0f;
-    private static final float TNT_EXPLOSIVE_POWER = 1.5f;
-    private static final int PRIMED_TNT_TICKS = 20;
+    private float bomberExplosivePower;
+    private float tntExplosivePower;
+    private int primedTntTicks;
+
+    @Override
+    public void loadSettings(CustomMobsConfig config) {
+    	bomberExplosivePower = config.getBomberConfig().getBomberExplosivePower();
+    	tntExplosivePower = config.getBomberConfig().getTntExplosivePower();
+    	primedTntTicks = config.getBomberConfig().getPrimedTntTicks();
+    }
 
     @Override
     public Bomber spawn(Location location) {
@@ -57,7 +65,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         LivingEntity owner = fangs.getOwner();
         if (owner instanceof Spellcaster && isBomber((Spellcaster) owner)) {
             evt.setCancelled(true);
-            fangs.getWorld().createExplosion(fangs.getLocation(), BOMBER_EXPLOSIVE_POWER, false, false, owner);
+            fangs.getWorld().createExplosion(fangs.getLocation(), bomberExplosivePower, false, false, owner);
         }
     }
 
@@ -98,7 +106,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
             return;
         evt.setCancelled(true);
         TNTPrimed tnt = (TNTPrimed) damager.getWorld().spawnEntity(damager.getLocation(), EntityType.PRIMED_TNT);
-        tnt.setFuseTicks(PRIMED_TNT_TICKS);
+        tnt.setFuseTicks(primedTntTicks);
         tnt.getPersistentDataContainer().set(getTNTNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
     }
 
@@ -110,7 +118,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         if (!isVexTNT(tnt))
             return;
         evt.setCancelled(true);
-        tnt.getWorld().createExplosion(tnt.getLocation(), TNT_EXPLOSIVE_POWER, false, false);
+        tnt.getWorld().createExplosion(tnt.getLocation(), tntExplosivePower, false, false);
     }
 
     @EventHandler

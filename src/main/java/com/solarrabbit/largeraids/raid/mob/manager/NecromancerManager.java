@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
 import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.Necromancer;
 import com.solarrabbit.largeraids.util.VersionUtil;
 
@@ -40,6 +41,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class NecromancerManager implements CustomRaiderManager, Listener {
+
+    @Override
+    public void loadSettings(CustomMobsConfig config) {
+    }
 
     @Override
     public Necromancer spawn(Location location) {

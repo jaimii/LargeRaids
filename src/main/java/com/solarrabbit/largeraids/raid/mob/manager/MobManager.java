@@ -1,5 +1,7 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
-public interface MobManager {
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 
+public interface MobManager {
+	public void loadSettings(CustomMobsConfig config);
 }

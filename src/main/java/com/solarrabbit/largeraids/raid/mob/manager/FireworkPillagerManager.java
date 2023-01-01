@@ -1,6 +1,7 @@
 package com.solarrabbit.largeraids.raid.mob.manager;
 
 import com.solarrabbit.largeraids.LargeRaids;
+import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.FireworkPillager;
 
 import org.bukkit.ChatColor;
@@ -33,13 +34,18 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FireworkPillagerManager implements CustomRaiderManager, Listener {
-    private static final float DEFAULT_MAX_HEALTH = 48.0f;
+    private double health;
+
+    @Override
+    public void loadSettings(CustomMobsConfig config) {
+    	health = config.getFireworkPillagerConfig().getHealth();
+    }
 
     @Override
     public FireworkPillager spawn(Location location) {
         Pillager entity = (Pillager) location.getWorld().spawnEntity(location, EntityType.PILLAGER);
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(DEFAULT_MAX_HEALTH);
-        entity.setHealth(DEFAULT_MAX_HEALTH);
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+        entity.setHealth(health);
         EntityEquipment equipment = entity.getEquipment();
         equipment.setItemInOffHand(getDefaultFirework());
         equipment.setHelmet(getDefaultBanner());

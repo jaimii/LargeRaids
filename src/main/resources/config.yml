@@ -86,3 +86,17 @@ miscellaneous:
     normal-raid: false
     large-raid: false
     duration: 5
+
+custom-mobs:
+  firework-pillager:
+    health: 48.0
+  bomber:
+    bomber-explosive-power: 1.0
+    tnt-explosive-power: 1.5
+    primed-tnt-ticks: 20
+  king-raider:
+    ravager-health: 300.0
+    ravager-damage: 48.0
+    fang-damage: 6.0
+    fire-ticks: 140
+    regen-level: 4
