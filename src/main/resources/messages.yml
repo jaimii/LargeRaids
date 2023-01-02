@@ -1,8 +1,10 @@
 sender-player: This command must be executed by an in-game player!
 
 config:
-  invalid-mob-array-length: The length of the arrays under the `mobs` configuration section below must be at least the number of waves!
-  zero-raider-wave: Each wave must have at least one raider!
+  mob-array-too-short: The wave spawning array for mob %s is too short! Expected a length of %d, got a length of %d.
+  mob-array-too-long: The wave spawning array for mob %s is too long. The expected length is %d, so the last %d value(s) will be ignored.
+  zero-raider-wave: Wave %s was found to have zero raiders. Every wave must have at least one raider!
+  integrity-checks-failed: Your config has failed one or more integrity checks.
 
 start-raid:
   player-not-found: The player you inputted was not found!

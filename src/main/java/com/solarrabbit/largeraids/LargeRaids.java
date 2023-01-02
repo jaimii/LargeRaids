@@ -106,9 +106,13 @@ public final class LargeRaids extends JavaPlugin {
     }
 
     public void log(String message, Level level) {
+        this.log(message, level, level == Level.FAIL);
+    }
+
+    public void log(String message, Level level, boolean disable) {
         this.logger.sendMessage(message, level);
-        if (level == Level.FAIL) {
-            this.logger.sendMessage("Disabling plugin...", level);
+        if (disable) {
+            this.logger.sendMessage("Disabling plugin...", Level.FAIL);
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
@@ -132,7 +136,10 @@ public final class LargeRaids extends JavaPlugin {
     }
 
     private void loadCustomConfigs() {
-        testConfig();
+        if (!testConfig()) {
+        	this.log(this.messages.getString("config.integrity-checks-failed"), Level.FAIL);
+        	return;
+        }
         raidConfig = new RaidConfig(getConfig().getConfigurationSection("raid"));
         rewardsConfig = new RewardsConfig(getConfig().getConfigurationSection("rewards"));
         triggerConfig = new TriggersConfig(getConfig().getConfigurationSection("trigger"));
@@ -223,24 +230,30 @@ public final class LargeRaids extends JavaPlugin {
         }
     }
 
-    private void testConfig() {
+    private boolean testConfig() {
+    	boolean pass = true;
         int totalWaves = this.getConfig().getInt("raid.waves");
+        int wavesToCheck = totalWaves;
         ConfigurationSection section = this.getConfig().getConfigurationSection("raid.mobs");
         for (String mob : section.getKeys(false)) {
-            if (section.getIntegerList(mob).size() < totalWaves) {
-                this.log(this.messages.getString("config.invalid-mob-array-length"), Level.FAIL);
-                return;
-            }
+        	int length = section.getIntegerList(mob).size();
+            if (length < totalWaves) {
+                this.log(String.format(this.messages.getString("config.mob-array-too-short"), mob, totalWaves, length), Level.FAIL, false);
+                wavesToCheck = Math.min(length, wavesToCheck);
+                pass = false;
+            } else if (length > totalWaves)
+            	this.log(String.format(this.messages.getString("config.mob-array-too-long"), mob, totalWaves, length - totalWaves), Level.WARN);
         }
-        for (int i = 0; i < totalWaves; i++) {
+        for (int i = 0; i < wavesToCheck; i++) {
             final int wave = i;
             int totalRaiders = section.getKeys(false).stream().map(key -> section.getIntegerList(key).get(wave))
                     .reduce(0, (x, y) -> x + y);
             if (totalRaiders == 0) {
-                this.log(this.messages.getString("config.zero-raider-wave"), Level.FAIL);
-                return;
+                this.log(String.format(this.messages.getString("config.zero-raider-wave"), wave), Level.FAIL, false);
+                pass = false;
             }
         }
+        return pass;
     }
 
     private void fetchSpigotUpdates() {
