@@ -12,7 +12,7 @@ import org.bukkit.entity.Raider;
 import org.bukkit.entity.Vex;
 
 public class VersionUtil {
-	private static final String VERSION = "v1_19_R1";
+	private static final String VERSION = "v1_19_R2";
 
     public static AbstractBlockPositionWrapper getBlockPositionWrapper(Location location) {
         return getBlockPositionWrapper(location.getX(), location.getY(), location.getZ());
