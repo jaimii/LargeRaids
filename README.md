@@ -9,13 +9,15 @@
 
 **LargeRaids** is a vanilla game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which were added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulties, higher bad omen levels, more raiders, more waves and better rewards.
 
-This is a fork of the original LargeRaids plugin, updated to 1.19.2. This version will ONLY support 1.19.2.
+This is a fork of the original LargeRaids plugin, updated to the latest Minecraft versions. All the latest builds for each version can be found in the releases tab. Older versions are no longer supported.
 
 This plugin will work for both Spigot and Paper, but the latter is recommended because one of the optional extensions (MythicMobs) relies on it.
 
-## Server Requirements
+## Updating to Later Versions
 
-- Version: 1.19.2
+Updating is usually very simple. First, in build.gradle.kts, change the variable mcVersion to the new version. Then, replace the Bukkit version with the newest one in the source code. For example, the Bukkit version for 1.19.2 is v1_19_R1. Right now, there are 6 instances of this string in the source code.
+
+Run 'gradlew build' afterwards. If there are still errors, the source code will need to be manually updated to be compatible with the new Minecraft version. 
 
 ## Statistics
 

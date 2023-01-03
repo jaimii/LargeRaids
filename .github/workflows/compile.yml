@@ -22,10 +22,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Get Minecraft Version
-        run: echo "MC_VERSION=$(gradlew -q getMCVersion)" >> $GITHUB_ENV
+        run: echo "MC_VERSION=$(${{ github.workspace }}/gradlew -q getMCVersion)" >> $GITHUB_ENV
 
       - name: Get Plugin Version
-        run: echo "PLUGIN_VERSION=$(gradlew -q getVersion)" >> $GITHUB_ENV
+        run: echo "PLUGIN_VERSION=$(${{ github.workspace }}/gradlew -q getVersion)" >> $GITHUB_ENV
 
       - name: Execute Gradle build
         run: ./gradlew build
