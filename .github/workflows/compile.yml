@@ -39,4 +39,4 @@ jobs:
           prerelease: false
           title: "Plugin Download"
           files: |
-            build/libs/LargeRaids-1.10.5.jar
+            build/libs/LargeRaids-1.11.jar
