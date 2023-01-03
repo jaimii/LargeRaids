@@ -11,6 +11,7 @@ plugins {
 group = "com.solarrabbit"
 version = "1.11"
 description = "LargeRaids"
+val mcVersion = "1.19.2"
 
 java {
   // Configure the java toolchain. This allows gradle to auto-provision JDK 17 on systems that only have JDK 8 installed for example.
@@ -56,6 +57,7 @@ tasks {
   }
   processResources {
     filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
+    expand("version" to version)
   }
 
   /*
@@ -65,4 +67,16 @@ tasks {
     outputJar.set(layout.buildDirectory.file("libs/PaperweightTestPlugin-${project.version}.jar"))
   }
    */
+}
+
+tasks.register("getVersion") {
+    doLast {
+        println(version)
+    }
+}
+
+tasks.register("getMCVersion") {
+    doLast {
+        println(mcVersion)
+    }
 }

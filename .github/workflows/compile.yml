@@ -21,6 +21,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Get Minecraft Version
+        run: echo "MC_VERSION=$(gradlew -q getMCVersion)" >> $GITHUB_ENV
+
+      - name: Get Plugin Version
+        run: echo "PLUGIN_VERSION=$(gradlew -q getVersion)" >> $GITHUB_ENV
+
       - name: Execute Gradle build
         run: ./gradlew build
 
@@ -30,13 +36,13 @@ jobs:
         with:
           name: LargeRaids
           path: build/libs/
-          
+
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          automatic_release_tag: "${{ env.MC_VERSION }}"
           prerelease: false
-          title: "Plugin Download"
+          title: "Plugin Download for Minecraft ${{ env.MC_VERSION }}"
           files: |
-            build/libs/LargeRaids-1.11.jar
+            build/libs/LargeRaids-${{ env.PLUGIN_VERSION }}.jar

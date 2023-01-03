@@ -1,6 +1,6 @@
 main: com.solarrabbit.largeraids.LargeRaids
 name: LargeRaids
-version: 1.11
+version: ${version}
 author: SolarRabbit
 api-version: 1.14
 
