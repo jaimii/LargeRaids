@@ -14,7 +14,7 @@ public class PlayerEntityWrapper implements AbstractPlayerEntityWrapper {
     public PlayerEntityWrapper(AbstractMinecraftServerWrapper server, AbstractWorldServerWrapper world,
             GameProfile profile, ProfilePublicKey publicKey) {
         this.player = new ServerPlayer(((MinecraftServerWrapper) server).server, ((WorldServerWrapper) world).server,
-                profile, publicKey);
+                profile);
     }
 
     @Override
