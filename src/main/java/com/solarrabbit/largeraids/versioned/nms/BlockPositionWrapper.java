@@ -7,12 +7,13 @@ import javax.annotation.Nonnull;
 import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 public class BlockPositionWrapper implements AbstractBlockPositionWrapper {
     final BlockPos blockPos;
 
     public BlockPositionWrapper(double x, double y, double z) {
-        this.blockPos = new BlockPos(x, y, z);
+        this.blockPos = new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z));
     }
 
     BlockPositionWrapper(@Nonnull BlockPos blockPos) {
