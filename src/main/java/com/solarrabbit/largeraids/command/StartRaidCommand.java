@@ -46,14 +46,14 @@ public class StartRaidCommand extends Trigger implements CommandExecutor {
                     return false;
             }
             sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("start-raid.started-at"),
-        			location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                    location.getBlockX(), location.getBlockY(), location.getBlockZ()));
             triggerRaid(sender, location);
             return true;
         } else if (sender instanceof Player) {
             Player player = (Player) sender;
             Location location = player.getLocation();
             sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("start-raid.started-at"),
-            		location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                    location.getBlockX(), location.getBlockY(), location.getBlockZ()));
             triggerRaid(sender, location);
             return true;
         }

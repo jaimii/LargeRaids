@@ -7,7 +7,7 @@ config:
   integrity-checks-failed: Your config has failed one or more integrity checks.
 
 start-raid:
-  player-not-found: The player you inputted was not found!
+  player-not-found: The player you inputed was not found!
   no-village-centers: There are no existing artificial village centers with that name!
   village-center-world-missing: Specified artificial village center's world is missing!
   started-at: A large raid was started at (%d, %d, %d).
@@ -19,7 +19,9 @@ skip-wave:
   skip-success: Successfully skipped wave %d. There are %d total waves.
   
 stop-raid:
-  player-not-found: The player you inputted was not found!
+  player-not-found: The player you inputed was not found!
+  no-village-centers: There are no existing artificial village centers with that name!
+  village-center-world-missing: Specified artificial village center's world is missing!
   no-large-raid: No large raid was found at (%d, %d, %d)!
   stopped-raid: The large raid at (%d, %d, %d) was stopped.
   specify-player: You must specify a player name if you wish to run this as a non-player!

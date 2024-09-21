@@ -12,10 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-public class StartRaidCommandCompleter implements TabCompleter {
+public class StartStopRaidCommandCompleter implements TabCompleter {
     private final DatabaseAdapter db;
 
-    public StartRaidCommandCompleter(DatabaseAdapter db) {
+    public StartStopRaidCommandCompleter(DatabaseAdapter db) {
         this.db = db;
     }
 

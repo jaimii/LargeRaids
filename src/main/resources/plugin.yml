@@ -19,7 +19,7 @@ commands:
     permission: largeraids.skip
   lrstop:
     description: Stops a large raid.
-    usage: /<command> <player>
+    usage: /<command> [player | center] [name]
     permission: largeraids.stop
   lrgive:
     description: Give a player the summoning item.
