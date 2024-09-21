@@ -201,7 +201,7 @@ placeholder:
 
 ```yml
 miscellaneous:
-  # Percent chance of the wandering trader would drop a book.
+  # Percent chance the wandering trader drops a book.
   trader-drop-chance: 0.1
   # Maximum number of ongoing large raids permitted at any point in time. Set to 0 for no limit.
   max-raids: 0

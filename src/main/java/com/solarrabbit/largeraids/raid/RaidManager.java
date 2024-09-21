@@ -160,8 +160,8 @@ public class RaidManager implements Listener {
     private void tick() {
     	PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
         for (LargeRaid largeRaid : currentRaids)
-        	// Each vanilla raid is supposed to spawn one wave, before being replaced by another instance of raid.
-        	// If the first wave has spawned and all raiders are dead, this indicates that it is time to trigger the next wave.
+            // Each vanilla raid is supposed to spawn one wave, before being replaced by another instance of raid.
+            // If the first wave has spawned and all raiders are dead, this indicates that it is time to trigger the next wave.
             if (largeRaid.isActive() && largeRaid.getTotalRaidersAlive() == 0 && largeRaid.firstWaveSpawned()
                     && !largeRaid.isLastWave()) {
                 setIdle();
