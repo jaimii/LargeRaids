@@ -75,7 +75,7 @@ public class StopRaidCommand implements CommandExecutor {
             return true;
         }
         if (!(sender instanceof Player))
-        	sender.sendMessage(ChatColor.RED + this.plugin.getMessage("stop-raid.specify-player"));
+            sender.sendMessage(ChatColor.RED + this.plugin.getMessage("stop-raid.specify-player"));
         return false;
     }
 

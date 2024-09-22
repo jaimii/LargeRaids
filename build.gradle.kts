@@ -32,11 +32,6 @@ dependencies {
   shadow("org.bstats:bstats-bukkit:2.0.1")
   implementation("me.clip:placeholderapi:2.11.6")
   implementation("io.lumine:Mythic-Dist:5.2.0-SNAPSHOT")
-  // paperweightDevBundle("com.example.paperfork", "1.19.2-R0.1-SNAPSHOT")
-
-  // You will need to manually specify the full dependency if using the groovy gradle dsl
-  // (paperDevBundle and paperweightDevBundle functions do not work in groovy)
-  // paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19.2-R0.1-SNAPSHOT")
 }
 
 tasks {

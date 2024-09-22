@@ -34,7 +34,7 @@ public abstract class RaidersOutliner {
         PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, duration, 0);
         raiders.forEach(raider -> raider.addPotionEffect(effect));
     }
-    
+
     /**
      * Outlines all raiders within the raid after a default number of ticks that is
      * used in vanilla after resonate sound plays.

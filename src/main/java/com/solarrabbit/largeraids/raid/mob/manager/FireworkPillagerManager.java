@@ -38,7 +38,7 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
 
     @Override
     public void loadSettings(CustomMobsConfig config) {
-    	health = config.getFireworkPillagerConfig().getHealth();
+        health = config.getFireworkPillagerConfig().getHealth();
     }
 
     @Override

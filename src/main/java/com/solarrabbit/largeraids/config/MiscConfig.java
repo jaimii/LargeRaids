@@ -17,9 +17,9 @@ public class MiscConfig {
         shouldBellOutlineLarge = bellOutlineConfig.getBoolean("large-raid");
         bellOutlineDuration = bellOutlineConfig.getInt("duration");
     }
-    
+
     public double getTraderDropChance() {
-    	return traderDropChance;
+        return traderDropChance;
     }
 
     public int getMaxRaid() {

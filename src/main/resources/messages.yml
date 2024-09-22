@@ -17,7 +17,7 @@ skip-wave:
   no-large-raid: No large raid exists at your current location!
   last-wave: The raid is now in its last wave. If you want to stop the raid, use /lrstop instead!
   skip-success: Successfully skipped wave %d. There are %d total waves.
-  
+
 stop-raid:
   player-not-found: The player you inputed was not found!
   no-village-centers: There are no existing artificial village centers with that name!
@@ -25,7 +25,7 @@ stop-raid:
   no-large-raid: No large raid was found at (%d, %d, %d)!
   stopped-raid: The large raid at (%d, %d, %d) was stopped.
   specify-player: You must specify a player name if you wish to run this as a non-player!
-  
+
 view-wave:
   no-raid-exists: No raid exists at your location!
   large-raid: It is currently wave %d out of %d for the current large raid.
@@ -56,7 +56,7 @@ village-centers:
   database:
     add-fail: The artificial village center might not have been added properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.
     remove-fail: The artificial village center might not have been removed properly to the database and might cause further problems! You are advised to restart the server and report this issue immediately.
-    
+
 outline-raiders:
   need-positive: Duration must be a positive number!
   no-raid-exists: No raid exists at your location!

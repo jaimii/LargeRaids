@@ -23,12 +23,12 @@ import org.bukkit.entity.Player;
 public class OutlineRaidersCommand extends RaidersOutliner implements CommandExecutor {
     private final LargeRaids plugin;
     private final RaidManager manager;
-    
+
     public OutlineRaidersCommand(LargeRaids plugin) {
         this.plugin = plugin;
         manager = plugin.getRaidManager();
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -38,7 +38,7 @@ public class OutlineRaidersCommand extends RaidersOutliner implements CommandExe
         if (args.length < 1)
             return false;
         Location location = ((Player) sender).getLocation();
-        
+
         try {
             int seconds = Integer.parseInt(args[0]);
             if (seconds <= 0) {

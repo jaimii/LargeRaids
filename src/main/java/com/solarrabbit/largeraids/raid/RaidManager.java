@@ -158,7 +158,7 @@ public class RaidManager implements Listener {
     }
 
     private void tick() {
-    	PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
+        PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
         for (LargeRaid largeRaid : currentRaids)
             // Each vanilla raid is supposed to spawn one wave, before being replaced by another instance of raid.
             // If the first wave has spawned and all raiders are dead, this indicates that it is time to trigger the next wave.
@@ -168,17 +168,17 @@ public class RaidManager implements Listener {
                 largeRaid.triggerNextWave();
                 setActive();
             } else if (largeRaid.areRaidersOutlined())
-            	largeRaid.applyGlowing();
-        
+                largeRaid.applyGlowing();
+
         Iterator<AbstractRaidWrapper> itr = outlinedRaids.iterator();
         while (itr.hasNext()) {
-        	AbstractRaidWrapper wrapper = itr.next();
-        	Raid raid = VersionUtil.getCraftRaidWrapper(wrapper).getRaid();
-        	
-        	if (raid.getStatus() != RaidStatus.ONGOING)
-        		itr.remove();
-        	else
-        		raid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
+            AbstractRaidWrapper wrapper = itr.next();
+            Raid raid = VersionUtil.getCraftRaidWrapper(wrapper).getRaid();
+
+            if (raid.getStatus() != RaidStatus.ONGOING)
+                itr.remove();
+            else
+                raid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
         }
     }
 

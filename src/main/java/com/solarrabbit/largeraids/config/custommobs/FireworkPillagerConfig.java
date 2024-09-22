@@ -6,7 +6,7 @@ public class FireworkPillagerConfig {
     private final double health;
 
     public FireworkPillagerConfig(ConfigurationSection config) {
-    	health = config.getDouble("health");
+        health = config.getDouble("health");
     }
 
     public double getHealth() {

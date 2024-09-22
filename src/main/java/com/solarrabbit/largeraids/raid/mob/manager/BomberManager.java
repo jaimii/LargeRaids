@@ -41,9 +41,9 @@ public class BomberManager implements CustomRaiderManager, Listener {
 
     @Override
     public void loadSettings(CustomMobsConfig config) {
-    	bomberExplosivePower = config.getBomberConfig().getBomberExplosivePower();
-    	tntExplosivePower = config.getBomberConfig().getTntExplosivePower();
-    	primedTntTicks = config.getBomberConfig().getPrimedTntTicks();
+        bomberExplosivePower = config.getBomberConfig().getBomberExplosivePower();
+        tntExplosivePower = config.getBomberConfig().getTntExplosivePower();
+        primedTntTicks = config.getBomberConfig().getPrimedTntTicks();
     }
 
     @Override

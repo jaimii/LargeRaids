@@ -51,6 +51,6 @@ public class GiveSummonItemCommand implements CommandExecutor {
                     .forEach((index, item) -> receiver.getWorld().dropItem(receiver.getLocation(), item));
         }
         requester.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("give-items.success"),
-        		receiver.getName(), requestAmount, requestAmount == 1 ? "" : "s"));
+                receiver.getName(), requestAmount, requestAmount == 1 ? "" : "s"));
     }
 }

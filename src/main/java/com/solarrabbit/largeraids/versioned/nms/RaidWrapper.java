@@ -47,7 +47,7 @@ public class RaidWrapper implements AbstractRaidWrapper {
 
     @Override
     public int getTotalGroups() {
-    	return this.raid.numGroups;
+        return this.raid.numGroups;
     }
 
     @Override
@@ -94,10 +94,10 @@ public class RaidWrapper implements AbstractRaidWrapper {
             return false;
         }
     }
-    
+
     @Override
     public int hashCode() {
-    	return this.raid.hashCode();
+        return this.raid.hashCode();
     }
 
     @Override

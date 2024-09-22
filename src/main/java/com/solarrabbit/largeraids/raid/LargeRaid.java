@@ -221,13 +221,13 @@ public class LargeRaid {
         if (sound != null)
             playSoundToPlayersInRadius(sound);
     }
-    
+
     /**
      * Applies the glowing effect to all raiders.
      */
     public void applyGlowing() {
-    	PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
-    	currentRaid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
+        PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
+        currentRaid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
     }
 
     /**
@@ -277,13 +277,13 @@ public class LargeRaid {
     public boolean isActive() {
         return getCurrentNMSRaid().isActive();
     }
-    
+
     public boolean areRaidersOutlined() {
-    	return raidersOutlined;
+        return raidersOutlined;
     }
-    
+
     public void setRaidersOutlined(boolean raidersOutlined) {
-    	this.raidersOutlined = raidersOutlined;
+        this.raidersOutlined = raidersOutlined;
     }
 
     /**

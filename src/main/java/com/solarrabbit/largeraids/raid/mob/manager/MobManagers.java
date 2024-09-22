@@ -36,9 +36,9 @@ public class MobManagers {
         managers.put(VanillaRaider.class, vanillaRaiderManager);
         managers.put(VanillaRiderRaider.class, vanillaRaiderManager);
     }
-    
+
     public void loadSettings(CustomMobsConfig config) {
-    	managers.forEach((c, m) -> m.loadSettings(config));
+        managers.forEach((c, m) -> m.loadSettings(config));
     }
 
     public MobManager getMobManager(Class<? extends Raider> raiderClass) {

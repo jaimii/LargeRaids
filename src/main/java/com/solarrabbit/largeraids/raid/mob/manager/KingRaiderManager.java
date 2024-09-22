@@ -49,11 +49,11 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
 
     @Override
     public void loadSettings(CustomMobsConfig config) {
-    	ravagerHealth = config.getKingRaiderConfig().getRavagerHealth();
-    	ravagerDamage = config.getKingRaiderConfig().getRavagerDamage();
-    	fangDamage = config.getKingRaiderConfig().getFangDamage();
-    	fireTicks = config.getKingRaiderConfig().getFireTicks();
-    	regenLevel = config.getKingRaiderConfig().getRegenLevel();
+        ravagerHealth = config.getKingRaiderConfig().getRavagerHealth();
+        ravagerDamage = config.getKingRaiderConfig().getRavagerDamage();
+        fangDamage = config.getKingRaiderConfig().getFangDamage();
+        fireTicks = config.getKingRaiderConfig().getFireTicks();
+        regenLevel = config.getKingRaiderConfig().getRegenLevel();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         ravager.setHealth(ravagerHealth);
         ravager.getPersistentDataContainer().set(getJuggernautNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
         if (regenLevel >= 0)
-        	ravager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, regenLevel));
+            ravager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, regenLevel));
 
         Spellcaster rider = (Spellcaster) location.getWorld().spawnEntity(location, RIDER_TYPE);
         EntityEquipment equipment = rider.getEquipment();

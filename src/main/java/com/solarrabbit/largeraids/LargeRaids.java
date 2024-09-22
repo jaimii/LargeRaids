@@ -138,8 +138,8 @@ public final class LargeRaids extends JavaPlugin {
 
     private void loadCustomConfigs() {
         if (!testConfig()) {
-        	this.log(this.messages.getString("config.integrity-checks-failed"), Level.FAIL);
-        	return;
+            this.log(this.messages.getString("config.integrity-checks-failed"), Level.FAIL);
+            return;
         }
         raidConfig = new RaidConfig(getConfig().getConfigurationSection("raid"));
         rewardsConfig = new RewardsConfig(getConfig().getConfigurationSection("rewards"));
@@ -197,9 +197,9 @@ public final class LargeRaids extends JavaPlugin {
     public MiscConfig getMiscConfig() {
         return miscConfig;
     }
-    
+
     public CustomMobsConfig getCustomMobsConfig() {
-    	return customMobsConfig;
+        return customMobsConfig;
     }
 
     private void reloadTriggers() {
@@ -232,18 +232,18 @@ public final class LargeRaids extends JavaPlugin {
     }
 
     private boolean testConfig() {
-    	boolean pass = true;
+        boolean pass = true;
         int totalWaves = this.getConfig().getInt("raid.waves");
         int wavesToCheck = totalWaves;
         ConfigurationSection section = this.getConfig().getConfigurationSection("raid.mobs");
         for (String mob : section.getKeys(false)) {
-        	int length = section.getIntegerList(mob).size();
+            int length = section.getIntegerList(mob).size();
             if (length < totalWaves) {
                 this.log(String.format(this.messages.getString("config.mob-array-too-short"), mob, totalWaves, length), Level.FAIL, false);
                 wavesToCheck = Math.min(length, wavesToCheck);
                 pass = false;
             } else if (length > totalWaves)
-            	this.log(String.format(this.messages.getString("config.mob-array-too-long"), mob, totalWaves, length - totalWaves), Level.WARN);
+                this.log(String.format(this.messages.getString("config.mob-array-too-long"), mob, totalWaves, length - totalWaves), Level.WARN);
         }
         for (int i = 0; i < wavesToCheck; i++) {
             final int wave = i;

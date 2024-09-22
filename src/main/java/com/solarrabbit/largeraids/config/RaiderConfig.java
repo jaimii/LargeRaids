@@ -71,7 +71,7 @@ public class RaiderConfig {
         loadVanillaRaiders();
         loadCustomRaiders();
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
-        	JavaPlugin.getPlugin(LargeRaids.class).log("MythicMobs intergration enabled.", Level.INFO);
+            JavaPlugin.getPlugin(LargeRaids.class).log("MythicMobs intergration enabled.", Level.INFO);
             loadMythicRaiders();
         }
     }
