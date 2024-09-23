@@ -19,7 +19,7 @@ public interface AbstractRaidWrapper {
 
     boolean hasFirstWaveSpawned();
 
-    void setBadOmenLevel(int level);
+    void setRaidOmenLevel(int level);
 
     int getTotalGroups();
 

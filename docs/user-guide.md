@@ -25,7 +25,7 @@ Refer to the [Configuration Guide](configurations.html).
 - `%largeraids_wave%` - current wave number
 - `%largeraids_total_waves%` - number of waves in total
 - `%largeraids_remaining_raiders%` - number of remaining raiders
-- `%largeraids_omen_level%` - accumulative bad omen level
+- `%largeraids_omen_level%` - accumulative raid omen level
 - `%largeraids_player_kills%` - raiders killed by player
 
 ## Permissions

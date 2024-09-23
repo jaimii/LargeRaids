@@ -31,7 +31,7 @@ public class VillageAbsorbOmenListener extends Trigger {
      */
     @EventHandler
     public void onVanillaRaidCreation(RaidTriggerEvent evt) {
-        if (evt.getRaid().getBadOmenLevel() != 0) // Raid is getting extended
+        if (evt.getRaid().getRaidOmenLevel() != 0) // Raid is getting extended
             return;
         if (plugin.getRaidManager().isIdle()) // LargeRaid triggering
             return;

@@ -242,7 +242,7 @@ public class LargeRaid {
      *
      * @return large raid's omen level
      */
-    public int getBadOmenLevel() {
+    public int getRaidOmenLevel() {
         return omenLevel;
     }
 
@@ -321,7 +321,7 @@ public class LargeRaid {
     }
 
     /**
-     * Absorbs a certain level of bad omen, which may change the overall omen level
+     * Absorbs a certain level of raid omen, which may change the overall omen level
      * and total waves of the large raid.
      *
      * @param level levels to absorb
@@ -345,17 +345,17 @@ public class LargeRaid {
     }
 
     /**
-     * Set the bad omen level of the current raid back to {@code 2} if it has been
+     * Set the raid omen level of the current raid back to {@code 2} if it has been
      * increased by the absorption of player's omen. Used for detecting whether a
-     * player with Bad Omen effect entered the raid.
+     * player with Raid Omen effect entered the raid.
      *
      * @return {@code true} if the omen level of the actual raid has been increased
      *         above 2
      */
     public boolean releaseOmen() {
-        if (currentRaid.getBadOmenLevel() <= VANILLA_RAID_OMEN_LEVEL)
+        if (currentRaid.getRaidOmenLevel() <= VANILLA_RAID_OMEN_LEVEL)
             return false;
-        currentRaid.setBadOmenLevel(VANILLA_RAID_OMEN_LEVEL);
+        currentRaid.setRaidOmenLevel(VANILLA_RAID_OMEN_LEVEL);
         return true;
     }
 
@@ -408,7 +408,7 @@ public class LargeRaid {
 
         for (String command : rewardsConfig.getCommands())
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("<player>", player.getName())
-                    .replace("<omen>", String.valueOf(getBadOmenLevel())));
+                    .replace("<omen>", String.valueOf(getRaidOmenLevel())));
     }
 
     private void setRaid(Raid raid) {
@@ -441,7 +441,7 @@ public class LargeRaid {
 
     /**
      * Creates a raid with a fake player entity at the given location. The raid's
-     * bad omen is set to 2 arbitrarily. This method should always be called when
+     * raid omen is set to 2 arbitrarily. This method should always be called when
      * {@link RaidManager} is idle, and set back to active after calling the
      * method. This method may return empty wrapper if the raid is cancelled by
      * third party.
@@ -464,7 +464,7 @@ public class LargeRaid {
                 location.getZ());
         AbstractRaidWrapper raid = level.getRaidAt(blkPos);
         if (!raid.isEmpty())
-            raid.setBadOmenLevel(VANILLA_RAID_OMEN_LEVEL);
+            raid.setRaidOmenLevel(VANILLA_RAID_OMEN_LEVEL);
         return raid;
     }
 

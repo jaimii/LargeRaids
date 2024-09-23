@@ -87,7 +87,7 @@ public class RaidManager implements Listener {
      */
     @EventHandler
     private void onNormalRaidTrigger(RaidTriggerEvent evt) {
-        if (evt.getRaid().getBadOmenLevel() != 0) // Raid is getting extended
+        if (evt.getRaid().getRaidOmenLevel() != 0) // Raid is getting extended
             return;
         if (isIdle()) // LargeRaid triggering
             return;
@@ -235,9 +235,9 @@ public class RaidManager implements Listener {
      * @param omenLevel levels to absorb
      */
     public void extendRaid(LargeRaid raid, int omenLevel) {
-        int oldLevel = raid.getBadOmenLevel();
+        int oldLevel = raid.getRaidOmenLevel();
         raid.absorbOmenLevel(omenLevel);
-        int newLevel = raid.getBadOmenLevel();
+        int newLevel = raid.getRaidOmenLevel();
         if (newLevel != oldLevel)
             Bukkit.getPluginManager().callEvent(new LargeRaidExtendEvent(raid, oldLevel, newLevel));
     }

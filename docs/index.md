@@ -15,7 +15,7 @@ layout: home
 <img src="https://jitpack.io/v/zhenghanlee/LargeRaids-API.svg" alt="Jitpack">
 </center>
 
-**LargeRaids** is a vanilla Spigot game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which are added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulty, higher bad omen levels, more raiders, more waves and higher rewards.
+**LargeRaids** is a vanilla Spigot game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which are added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulty, higher raid omen levels, more raiders, more waves and higher rewards.
 
 <center><h1 style="font-family: Luminari">Server Requirements</h1></center>
 
