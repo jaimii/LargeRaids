@@ -15,9 +15,7 @@ This plugin will work for both Spigot and Paper, but the latter is recommended b
 
 ## Updating to Later Versions
 
-Updating is usually very simple. First, in build.gradle.kts, change the variable mcVersion to the new version. Then, replace the Bukkit version with the newest one in the source code. For example, the Bukkit version for 1.19.2 is v1_19_R1. Right now, there are 6 instances of this string in the source code.
-
-Run 'gradlew build' afterwards. If there are still errors, the source code will need to be manually updated to be compatible with the new Minecraft version. 
+In build.gradle.kts, change the variable mcVersion to the new version. Then run 'gradlew build'. If there are still errors, the source code will need to be manually updated to be compatible with the new Minecraft version.
 
 ## Statistics
 
