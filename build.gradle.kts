@@ -2,10 +2,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   `java-library`
-  id("io.papermc.paperweight.userdev") version "1.3.11"
-  id ("com.github.johnrengelman.shadow") version "7.0.0"
+  id("io.papermc.paperweight.userdev") version "1.7.2"
+  id("com.github.johnrengelman.shadow") version "8.1.1"
   //id("xyz.jpenilla.run-paper") version "2.0.0" // Adds runServer and runMojangMappedServer tasks for testing
-  //id("net.minecrell.plugin-yml.bukkit") version "0.5.2" // Generates plugin.yml
 }
 
 group = "com.solarrabbit"
@@ -28,10 +27,10 @@ tasks.withType<ShadowJar> {
 }
 
 dependencies {
-  paperDevBundle(mcVersion + "-R0.1-SNAPSHOT")
-  shadow("org.bstats:bstats-bukkit:2.0.1")
+  paperweight.paperDevBundle(mcVersion + "-R0.1-SNAPSHOT")
+  shadow("org.bstats:bstats-bukkit:3.0.2")
   implementation("me.clip:placeholderapi:2.11.6")
-  implementation("io.lumine:Mythic-Dist:5.2.0-SNAPSHOT")
+  implementation("io.lumine:Mythic-Dist:5.6.2-SNAPSHOT")
 }
 
 tasks {
