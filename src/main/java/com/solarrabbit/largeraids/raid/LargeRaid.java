@@ -353,9 +353,9 @@ public class LargeRaid {
      *         above 2
      */
     public boolean releaseOmen() {
-        if (currentRaid.getRaidOmenLevel() <= VANILLA_RAID_OMEN_LEVEL)
+        if (currentRaid.getBadOmenLevel() <= VANILLA_RAID_OMEN_LEVEL)
             return false;
-        currentRaid.setRaidOmenLevel(VANILLA_RAID_OMEN_LEVEL);
+        currentRaid.setBadOmenLevel(VANILLA_RAID_OMEN_LEVEL);
         return true;
     }
 

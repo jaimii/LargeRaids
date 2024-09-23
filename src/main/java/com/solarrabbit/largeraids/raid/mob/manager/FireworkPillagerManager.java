@@ -72,7 +72,7 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
     private void onDamageRaider(EntityDamageByEntityEvent evt) {
         if (evt.getCause() != DamageCause.ENTITY_EXPLOSION)
             return;
-        if (evt.getDamager().getType() != EntityType.FIREWORK)
+        if (evt.getDamager().getType() != EntityType.FIREWORK_ROCKET)
             return;
         if (!(evt.getEntity() instanceof Raider))
             return;
@@ -96,11 +96,11 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
         meta.addPattern(new Pattern(DyeColor.MAGENTA, PatternType.STRIPE_CENTER));
         meta.addPattern(new Pattern(DyeColor.ORANGE, PatternType.CURLY_BORDER));
-        meta.addPattern(new Pattern(DyeColor.RED, PatternType.STRIPE_SMALL));
-        meta.addPattern(new Pattern(DyeColor.RED, PatternType.RHOMBUS_MIDDLE));
+        meta.addPattern(new Pattern(DyeColor.RED, PatternType.SMALL_STRIPES));
+        meta.addPattern(new Pattern(DyeColor.RED, PatternType.RHOMBUS));
         meta.addPattern(new Pattern(DyeColor.YELLOW, PatternType.FLOWER));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         meta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.ITALIC + "Firework Pillager Banner");
         banner.setItemMeta(meta);
         return banner;

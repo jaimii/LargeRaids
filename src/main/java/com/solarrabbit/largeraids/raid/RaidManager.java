@@ -87,7 +87,7 @@ public class RaidManager implements Listener {
      */
     @EventHandler
     private void onNormalRaidTrigger(RaidTriggerEvent evt) {
-        if (evt.getRaid().getRaidOmenLevel() != 0) // Raid is getting extended
+        if (evt.getRaid().getBadOmenLevel() != 0) // Raid is getting extended
             return;
         if (isIdle()) // LargeRaid triggering
             return;

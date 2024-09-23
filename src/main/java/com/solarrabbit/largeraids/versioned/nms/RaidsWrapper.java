@@ -14,7 +14,8 @@ public class RaidsWrapper implements AbstractRaidsWrapper {
 
     @Override
     public RaidWrapper createOrExtendRaid(AbstractPlayerEntityWrapper player) {
-        return new RaidWrapper(this.raids.createOrExtendRaid(((PlayerEntityWrapper) player).player));
+        return new RaidWrapper(this.raids.createOrExtendRaid(((PlayerEntityWrapper) player).player,
+            ((PlayerEntityWrapper) player).player.blockPosition()));
     }
 
     @Override
