@@ -7,7 +7,6 @@ import com.solarrabbit.largeraids.LargeRaids;
 import com.solarrabbit.largeraids.raid.LargeRaid;
 import com.solarrabbit.largeraids.trigger.Trigger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
@@ -18,12 +17,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class VillageAbsorbOmenListener extends Trigger {
-    private final KillCaptainListener killCaptainListener;
-
     public VillageAbsorbOmenListener(LargeRaids plugin) {
         super(plugin);
-        killCaptainListener = new KillCaptainListener(plugin);
-        Bukkit.getPluginManager().registerEvents(killCaptainListener, plugin);
     }
 
     /**
@@ -61,7 +56,6 @@ public class VillageAbsorbOmenListener extends Trigger {
     public void unregisterListener() {
         RaidTriggerEvent.getHandlerList().unregister(this);
         EntityPotionEffectEvent.getHandlerList().unregister(this);
-        killCaptainListener.unregisterListener();
     }
 
     private class MultipleLargeRaidReleaseOmenException extends RuntimeException {
