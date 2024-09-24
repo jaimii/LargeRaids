@@ -2,7 +2,6 @@ package com.solarrabbit.largeraids.trigger.omen;
 
 import com.solarrabbit.largeraids.LargeRaids;
 import com.solarrabbit.largeraids.trigger.Trigger;
-import com.solarrabbit.largeraids.util.VersionUtil;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,8 +38,7 @@ public class KillCaptainListener extends Trigger {
                 prevAmplifier = effect == null ? -1 : effect.getAmplifier();
                 break;
             case ADDED:
-                Cause cause = VersionUtil.getServerMinorVersion() == 14 ? Cause.UNKNOWN : Cause.PATROL_CAPTAIN;
-                if (evt.getCause() != cause) // Could be added by commands or the plugin itself
+                if (evt.getCause() != Cause.PATROL_CAPTAIN) // Could be added by commands or the plugin itself
                     return;
                 if (evt.getNewEffect().getAmplifier() == 0) // Ignore newly applied effect
                     return;

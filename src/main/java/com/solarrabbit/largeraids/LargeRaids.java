@@ -61,11 +61,17 @@ public final class LargeRaids extends JavaPlugin {
     public void onEnable() {
         logger = new PluginLogger();
 
-        if (!VersionUtil.isSupported()) {
-            log("Server implementation version not supported!", Level.FAIL);
-            return;
+        if (!VersionUtil.VERSION.equals(Bukkit.getServer().getMinecraftVersion())) {
+            boolean skipCheck = LargeRaids.class.getResource("/BYPASS_VERSION_CHECK.txt") != null;
+            log(String.format("Server version is not supported! Supported Version: %s, Your Version: %s",
+                    VersionUtil.VERSION, Bukkit.getServer().getMinecraftVersion()), Level.FAIL, false);
+            if (!skipCheck) {
+                log("You can allow the plugin to run anyways (not recommended) "
+                        + "by placing BYPASS_VERSION_CHECK.txt inside the plugin JAR", Level.FAIL);
+                return;
+            }
+            log("Unexpected crashes or errors may occur!", Level.WARN);
         }
-        fetchSpigotUpdates();
 
         // Initialize bstats
         final int pluginId = 13910;
@@ -255,18 +261,6 @@ public final class LargeRaids extends JavaPlugin {
             }
         }
         return pass;
-    }
-
-    private void fetchSpigotUpdates() {
-        final int resourceId = 95422;
-        final String resourcePage = "https://www.spigotmc.org/resources/largeraids-1-14-x-1-18-x.95422/";
-        ResourceChecker checker = new ResourceChecker();
-        checker.hasUpdate(this, resourceId).whenComplete((res, ex) -> {
-            if (ex != null)
-                log("Unable to retrieve updates from spigot website", Level.WARN);
-            else if (res)
-                log("New updates available, download it at " + resourcePage, Level.WARN);
-        });
     }
 
 }

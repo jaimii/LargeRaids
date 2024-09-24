@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.solarrabbit"
-version = "1.11.1"
+version = "1.11.2"
 description = "LargeRaids"
 val mcVersion = "1.20.6"
 
