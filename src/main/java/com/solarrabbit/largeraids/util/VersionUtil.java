@@ -11,8 +11,6 @@ import org.bukkit.entity.Raider;
 import org.bukkit.entity.Vex;
 
 public class VersionUtil {
-    public static final String VERSION = "1.20.6";
-
     public static AbstractBlockPositionWrapper getBlockPositionWrapper(Location location) {
         return getBlockPositionWrapper(location.getX(), location.getY(), location.getZ());
     }

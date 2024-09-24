@@ -15,7 +15,9 @@ This plugin will work for both Spigot and Paper, but the latter is recommended b
 
 ## Updating to Later Versions
 
-In build.gradle.kts, change the variable mcVersion to the new version. Then run 'gradlew build'. If there are still errors, the source code will need to be manually updated to be compatible with the new Minecraft version.
+In build.gradle.kts, change the variable mcVersion to the new version. Go to LargeRaids.java and change the version also. Then run 'gradlew build'. If there are still errors, the source code will need to be manually updated to be compatible with the new Minecraft version.
+
+In addition to fixing errors, you should look at the Mojang mapping for the ```groupsSpawned``` variable. If it is not ```J```, then you should change it at ```RaidWrapper.setGroupsSpawned()```.
 
 ## Statistics
 
