@@ -29,17 +29,16 @@ jobs:
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
-        if: success()
         with:
           name: LargeRaids
           path: build/libs/
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: "ThisTestUser/marvinpinto-action-automatic-releases@1.0"
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: "${{ env.MC_VERSION }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.MC_VERSION }}"
           prerelease: false
-          name: "Plugin Download for Minecraft ${{ env.MC_VERSION }}"
+          title: "Plugin Download for Minecraft ${{ env.MC_VERSION }}"
           files: |
             build/libs/LargeRaids-${{ env.PLUGIN_VERSION }}.jar

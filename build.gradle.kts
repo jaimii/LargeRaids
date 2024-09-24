@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
   `java-library`
   id("io.papermc.paperweight.userdev") version "1.7.2"
-  id("com.github.johnrengelman.shadow") version "8.1.1"
+  id("com.gradleup.shadow") version "8.3.2"
   //id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
@@ -24,6 +24,7 @@ repositories {
 
 tasks.withType<ShadowJar> {
   configurations = listOf(project.configurations.shadow.get())
+  relocate("org.bstats", "com.solarrabbit.largeraids.bstats")
 }
 
 dependencies {
