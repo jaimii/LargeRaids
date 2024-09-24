@@ -8,9 +8,9 @@ plugins {
 }
 
 group = "com.solarrabbit"
-version = "1.11.2"
+version = "1.11.3"
 description = "LargeRaids"
-val mcVersion = "1.20.6"
+val mcVersion = "1.21.1"
 
 java {
   // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.

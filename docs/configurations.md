@@ -140,7 +140,7 @@ We present the following triggering mechanisms. It's advised that you only enabl
 
 ```yml
 trigger:
-  # Players can get bad omen of level higher than 5 if enabled. Raids will all be large
+  # Raid omen level can stack to higher than 5 if enabled. Raids will all be large
   # raids, number of waves will be 5 or the accumulative omen level of all players
   # entering the village, whichever is higher. Maximum number of waves will be the
   # number of waves mentioned above in `raid.waves`.

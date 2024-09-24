@@ -37,15 +37,15 @@ public class VillageAbsorbOmenListener extends Trigger {
             return;
         evt.setCancelled(true);
         Player player = evt.getPlayer();
-        int amplifier = player.getPotionEffect(PotionEffectType.BAD_OMEN).getAmplifier();
+        int amplifier = player.getPotionEffect(PotionEffectType.RAID_OMEN).getAmplifier();
         triggerRaid(player, player.getLocation(), amplifier + 1);
     }
 
     @EventHandler
     public void onEffectRemoval(EntityPotionEffectEvent evt) {
         PotionEffectType type = evt.getModifiedType();
-        if (type == null || !type.equals(PotionEffectType.BAD_OMEN) || evt.getAction() != Action.REMOVED
-                || evt.getCause() != Cause.UNKNOWN)
+        if (type == null || !type.equals(PotionEffectType.RAID_OMEN) || evt.getAction() != Action.REMOVED
+                || evt.getCause() != Cause.EXPIRATION)
             return;
         Set<LargeRaid> affectedLargeRaids = plugin.getRaidManager().currentRaids.stream()
                 .filter(LargeRaid::releaseOmen).collect(Collectors.toSet());
