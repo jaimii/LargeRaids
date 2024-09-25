@@ -19,6 +19,9 @@ In build.gradle.kts, change the variable mcVersion to the new version. Go to Lar
 
 In addition to fixing errors, you should look at the Mojang mapping for the ```groupsSpawned``` variable. If it is not ```J```, then you should change it at ```RaidWrapper.setGroupsSpawned()```.
 
+## Known Bugs
+For any large raid, the minimum Hero of the Village effect given is level 2. This affects all versions of LargeRaids (including versions from the original mod author), and is caused by vanilla giving out the effect before ```RaidFinishEvent``` is fired.
+
 ## Statistics
 
 [![](https://bstats.org/signatures/bukkit/LargeRaids.svg)](https://bstats.org/plugin/bukkit/LargeRaids/13910)
