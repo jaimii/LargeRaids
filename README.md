@@ -9,7 +9,7 @@
 
 **LargeRaids** is a vanilla game experience enhancement plugin for [raids](https://minecraft.fandom.com/wiki/Raid), which were added to the game in the _Village & Pillage Update_. It expands the raid's mechanism to accommodate for the multiplayer environment with higher difficulties, higher raid omen levels, more raiders, more waves and better rewards.
 
-This is a fork of the original LargeRaids plugin, updated to the latest Minecraft versions. All the latest builds for each version can be found in the releases tab. Older versions are no longer supported.
+This is a fork of the original LargeRaids plugin, updated for 1.21.4, with work mostly done by ThisTestUser. All the latest builds for each version can be found in the releases tab. Older versions are no longer supported, this shoddy fork may or may not be temporary based on whether ThisTestUser will update it personally.
 
 This plugin will work for both Spigot and Paper, but the latter is recommended because one of the optional extensions (MythicMobs) relies on it.
 
