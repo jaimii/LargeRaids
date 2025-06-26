@@ -2,8 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   `java-library`
-  id("io.papermc.paperweight.userdev") version "1.7.2"
-  id("com.gradleup.shadow") version "8.3.2"
+  id("io.papermc.paperweight.userdev") version "2.0.0-beta.8"
+  id("com.gradleup.shadow") version "9.0.0-beta17"
   //id("xyz.jpenilla.run-paper") version "2.3.1" // Adds runServer and runMojangMappedServer tasks for testing
 }
 
