@@ -22,18 +22,24 @@ repositories {
 }
 
 tasks.withType<ShadowJar> {
+  archiveClassifier.set("")
   configurations = listOf(project.configurations.shadow.get())
   relocate("org.bstats", "com.solarrabbit.largeraids.bstats")
 }
 
 dependencies {
   paperweight.paperDevBundle(mcVersion + "-R0.1-SNAPSHOT")
-  shadow("org.bstats:bstats-bukkit:3.0.2")
+  shadow("org.bstats:bstats-bukkit:3.1.0")
   implementation("me.clip:placeholderapi:2.11.6")
   implementation("io.lumine:Mythic-Dist:5.9.5")
 }
 
 tasks {
+  // Use shadowJar as the main output
+  jar {
+    enabled = false
+  }
+
   // Configure reobfJar to run when invoking the build task
   assemble {
     dependsOn(reobfJar)
