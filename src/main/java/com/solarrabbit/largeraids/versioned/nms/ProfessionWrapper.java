@@ -10,16 +10,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerProfession;
 
 public class ProfessionWrapper implements AbstractProfessionWrapper {
-    public static final ProfessionWrapper MASON = new ProfessionWrapper(BuiltInRegistries.VILLAGER_PROFESSION.getOrThrow(VillagerProfession.MASON));
-    final Holder<VillagerProfession> professionHolder;
+    public static final ProfessionWrapper MASON = new ProfessionWrapper(BuiltInRegistries.VILLAGER_PROFESSION.getOrThrow(VillagerProfession.MASON).value());
+    final VillagerProfession profession;
 
-    ProfessionWrapper(Holder<VillagerProfession> professionHolder) {
-        this.professionHolder = professionHolder;
+    ProfessionWrapper(VillagerProfession profession) {
+        this.profession = profession;
     }
 
     @Override
     public Predicate<? super AbstractPoiTypeWrapper> getPredicate() {
-        return (poiTypeWrapper) -> professionHolder.value().acquirableJobSite().test(((PoiTypeWrapper) poiTypeWrapper).poiTypeHolder);
+        return (poiTypeWrapper) -> profession.acquirableJobSite().test(((PoiTypeWrapper) poiTypeWrapper).poiTypeHolder);
     }
 
 }
