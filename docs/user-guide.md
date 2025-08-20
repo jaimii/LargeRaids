@@ -16,6 +16,8 @@ Refer to the [Configuration Guide](configurations.html).
 - `/lrgive <player> [amount]` - give player summoning items
 - `/lrreload` - reload plugin configurations
 - `/lrglow` - outline all raiders in the current raid
+- `/lrshow` - displays the current wave
+- `/lrattack [prio] [target_thru_walls] [entity_class]` - makes all raiders of the current wave attack an entity type
 
 ## Placeholders
 
