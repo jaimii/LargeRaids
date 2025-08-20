@@ -21,6 +21,7 @@ import com.solarrabbit.largeraids.nms.AbstractBlockPositionWrapper;
 import com.solarrabbit.largeraids.nms.AbstractMinecraftServerWrapper;
 import com.solarrabbit.largeraids.nms.AbstractPlayerEntityWrapper;
 import com.solarrabbit.largeraids.nms.AbstractRaidWrapper;
+import com.solarrabbit.largeraids.nms.AbstractRaiderWrapper;
 import com.solarrabbit.largeraids.nms.AbstractRaidsWrapper;
 import com.solarrabbit.largeraids.nms.AbstractWorldServerWrapper;
 import com.solarrabbit.largeraids.raid.mob.RiderRaider;
@@ -437,6 +438,15 @@ public class LargeRaid {
         AbstractBlockPositionWrapper blkPos = VersionUtil.getBlockPositionWrapper(getCenter());
         AbstractWorldServerWrapper level = VersionUtil.getCraftWorldWrapper(getCenter().getWorld()).getHandle();
         return level.getRaidAt(blkPos);
+    }
+
+    public boolean addAttackGoal(int prio, boolean mustSee, Class<?> entityClass) {
+        for (Raider raider : currentRaid.getRaiders()) {
+            AbstractRaiderWrapper wrapper = VersionUtil.getCraftRaiderWrapper(raider).getHandle();
+            if (!wrapper.addAttackGoal(prio, mustSee, entityClass))
+                return false;
+        }
+        return true;
     }
 
     /**

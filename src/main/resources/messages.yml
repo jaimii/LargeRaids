@@ -66,3 +66,13 @@ outline-raiders:
   toggle-outlines-large-true: The large raid you are in will have all its raiders outlined.
   toggle-outlines-false: The raid you are in will no longer have its raiders outlined.
   toggle-outlines-true: The raid you are in will have all its raiders outlined.
+
+raider-attack:
+  no-large-raid: No large raid exists at your location!
+  no-raiders: No raiders were found in the large raid!
+  invalid-prio: Priority must be an integer!
+  prio-too-low: Priority must not be a negative number!
+  thru-walls-boolean: Target through walls option must be a boolean!
+  class-not-found: The specified class was not found!
+  invalid-entity-class: The specified class is not of LivingEntity type!
+  attack-goal-set: All raiders of the current wave will now target the specified entity type.

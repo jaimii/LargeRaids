@@ -36,6 +36,10 @@ commands:
   lrshow:
     description: Displays the current wave of the raid.
     permission: largeraids.show
+  lrattack:
+    description: Adds a certain entity type to all current raiders' attack list for this wave only.
+    usage: /<command> [prio] [target_thru_walls] [entity_class]
+    permission: largeraids.attack
 
 permissions:
   largeraids.*:
@@ -73,4 +77,7 @@ permissions:
     default: op
   largeraids.show:
     description: Allow access to lrshow command.
+    default: op
+  largeraids.attack:
+    description: Allow access to lrattack command.
     default: op

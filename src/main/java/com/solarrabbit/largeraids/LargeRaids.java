@@ -141,6 +141,7 @@ public final class LargeRaids extends JavaPlugin {
         getCommand("lrcenters").setExecutor(new VillageCentresCommand(this));
         getCommand("lrcenters").setTabCompleter(new VillageCentersCommandCompleter(db));
         getCommand("lrglow").setExecutor(new OutlineRaidersCommand(this));
+        getCommand("lrattack").setExecutor(new RaiderAttackCommand(this));
     }
 
     private void loadCustomConfigs() {
