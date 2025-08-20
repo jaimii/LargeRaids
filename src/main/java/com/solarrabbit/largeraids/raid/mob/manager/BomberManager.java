@@ -38,12 +38,14 @@ public class BomberManager implements CustomRaiderManager, Listener {
     private float bomberExplosivePower;
     private float tntExplosivePower;
     private int primedTntTicks;
+    private boolean tntBreakBlocks;
 
     @Override
     public void loadSettings(CustomMobsConfig config) {
         bomberExplosivePower = config.getBomberConfig().getBomberExplosivePower();
         tntExplosivePower = config.getBomberConfig().getTntExplosivePower();
         primedTntTicks = config.getBomberConfig().getPrimedTntTicks();
+        tntBreakBlocks = config.getBomberConfig().shouldTntBreakBlocks();
     }
 
     @Override
@@ -65,7 +67,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         LivingEntity owner = fangs.getOwner();
         if (owner instanceof Spellcaster && isBomber((Spellcaster) owner)) {
             evt.setCancelled(true);
-            fangs.getWorld().createExplosion(fangs.getLocation(), bomberExplosivePower, false, false, owner);
+            fangs.getWorld().createExplosion(fangs.getLocation(), bomberExplosivePower, false, tntBreakBlocks, owner);
         }
     }
 

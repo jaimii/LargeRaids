@@ -95,6 +95,7 @@ custom-mobs:
     bomber-explosive-power: 1.0
     tnt-explosive-power: 1.5
     primed-tnt-ticks: 20
+    tnt-break-blocks: false
   king-raider:
     ravager-health: 300.0
     ravager-damage: 48.0
