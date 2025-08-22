@@ -52,7 +52,7 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
         equipment.setHelmetDropChance(1.0f);
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         pdc.set(getPillagerNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        entity.setCustomName("Firework Pillager");
+        entity.setCustomName("Artillery  Pillager");
         return new FireworkPillager(entity);
     }
 
