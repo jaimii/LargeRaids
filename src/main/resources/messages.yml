@@ -76,3 +76,4 @@ raider-attack:
   class-not-found: The specified class was not found!
   invalid-entity-class: The specified class is not of LivingEntity type!
   attack-goal-set: All raiders of the current wave will now target the specified entity type.
+  attack-goal-set: All raiders of the current wave will now target entity %s.

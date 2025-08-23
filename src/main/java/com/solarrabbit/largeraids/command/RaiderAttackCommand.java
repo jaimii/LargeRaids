@@ -1,7 +1,6 @@
 package com.solarrabbit.largeraids.command;
 
 import com.solarrabbit.largeraids.LargeRaids;
-import com.solarrabbit.largeraids.nms.AbstractRaiderWrapper;
 import com.solarrabbit.largeraids.raid.LargeRaid;
 import com.solarrabbit.largeraids.raid.RaidManager;
 
@@ -77,7 +76,8 @@ public class RaiderAttackCommand implements CommandExecutor {
         if (!largeRaid.get().addAttackGoal(prio, !thruWalls, entityClass))
             sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raider-attack.invalid-entity-class"));
         else
-            sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raider-attack.attack-goal-set"));
+            sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raider-attack.attack-goal-set"),
+                    entityClass.getSimpleName()));
 
         return true;
     }
