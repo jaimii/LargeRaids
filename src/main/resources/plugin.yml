@@ -54,6 +54,7 @@ permissions:
       largeraids.centers: true
       largeraids.glow: true
       largeraids.show: true
+      largeraids.attack: true
   largeraids.reload:
     description: Allow access to lrreload command.
     default: op
