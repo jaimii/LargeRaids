@@ -72,7 +72,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         rider.getPersistentDataContainer().set(getKingNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        rider.setHealth(ravagerHealth);
         rider.setCustomName("§6§lCommanding Officer");
 
         BossBar bossBar = createBossBar(rider);
