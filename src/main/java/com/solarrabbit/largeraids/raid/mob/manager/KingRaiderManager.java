@@ -59,7 +59,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
     @Override
     public KingRaider spawn(Location location) {
         Ravager ravager = (Ravager) location.getWorld().spawnEntity(location, EntityType.RAVAGER);
-        ravager.setCustomName("§4§5Juggernaut");
+        ravager.setCustomName("§c§lJuggernaut Ravager");
         ravager.getAttribute(Attribute.MAX_HEALTH).setBaseValue(ravagerHealth);
         ravager.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(ravagerDamage);
         ravager.setHealth(ravagerHealth);
@@ -72,7 +72,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         rider.getPersistentDataContainer().set(getKingNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        rider.setCustomName("§6§lCommanding Officer");
+        rider.setCustomName("§6§lArch-Evoker");
 
         BossBar bossBar = createBossBar(rider);
         createBossBar(ravager);
