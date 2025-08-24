@@ -1,7 +1,6 @@
 package com.solarrabbit.largeraids.command;
 
 import com.solarrabbit.largeraids.LargeRaids;
-import com.solarrabbit.largeraids.nms.AbstractRaiderWrapper;
 import com.solarrabbit.largeraids.raid.LargeRaid;
 import com.solarrabbit.largeraids.raid.RaidManager;
 
@@ -12,8 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 
 /**
@@ -79,8 +76,7 @@ public class RaiderAttackCommand implements CommandExecutor {
         if (!largeRaid.get().addAttackGoal(prio, !thruWalls, entityClass))
             sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raider-attack.invalid-entity-class"));
         else
-            sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raider-attack.attack-goal-set"));
-
-        return true;
+            sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raider-attack.attack-goal-set"),
+                    entityClass.getSimpleName()));
     }
 }
