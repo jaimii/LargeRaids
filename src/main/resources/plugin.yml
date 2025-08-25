@@ -40,6 +40,10 @@ commands:
     description: Adds an entity type for current raiders to attack for this wave only.
     usage: /<command> [prio] [target_thru_walls] [entity_class]
     permission: largeraids.attack
+  lrconfig:
+    description: Configures some settings of the current large raid.
+    usage: /<command> spawn <x> <y> <z>, /<command> target <x> <y> <z> <radius>, /<command> [spawn | target] clear
+    permission: largeraids.config
 
 permissions:
   largeraids.*:
@@ -55,6 +59,7 @@ permissions:
       largeraids.glow: true
       largeraids.show: true
       largeraids.attack: true
+      largeraids.config: true
   largeraids.reload:
     description: Allow access to lrreload command.
     default: op
@@ -81,4 +86,7 @@ permissions:
     default: op
   largeraids.attack:
     description: Allow access to lrattack command.
+    default: op
+  largeraids.config:
+    description: Allow access to lrconfig command.
     default: op

@@ -7,8 +7,7 @@ import java.util.Set;
 
 import com.solarrabbit.largeraids.PluginLogger.Level;
 import com.solarrabbit.largeraids.command.*;
-import com.solarrabbit.largeraids.command.completer.StartStopRaidCommandCompleter;
-import com.solarrabbit.largeraids.command.completer.VillageCentersCommandCompleter;
+import com.solarrabbit.largeraids.command.completer.*;
 import com.solarrabbit.largeraids.config.MiscConfig;
 import com.solarrabbit.largeraids.config.PlaceholderConfig;
 import com.solarrabbit.largeraids.config.RaidConfig;
@@ -142,6 +141,8 @@ public final class LargeRaids extends JavaPlugin {
         getCommand("lrcenters").setTabCompleter(new VillageCentersCommandCompleter(db));
         getCommand("lrglow").setExecutor(new OutlineRaidersCommand(this));
         getCommand("lrattack").setExecutor(new RaiderAttackCommand(this));
+        getCommand("lrconfig").setExecutor(new RaidConfigCommand(this));
+        getCommand("lrconfig").setTabCompleter(new RaidConfigCommandCompleter());
     }
 
     private void loadCustomConfigs() {

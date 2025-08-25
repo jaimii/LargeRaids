@@ -18,6 +18,8 @@ Refer to the [Configuration Guide](configurations.html).
 - `/lrglow` - outline all raiders in the current raid
 - `/lrshow` - displays the current wave
 - `/lrattack [prio] [target_thru_walls] [entity_class]` - makes all raiders of the current wave attack an entity type
+- `/lrconfig spawn <x> <y> <z>` - for the current large raid, make all future waves spawn from this location
+- `/lrconfig target <x> <y> <z> <radius>` - for the current large raid, make raiders path-find to this location within range of this radius
 
 ## Placeholders
 

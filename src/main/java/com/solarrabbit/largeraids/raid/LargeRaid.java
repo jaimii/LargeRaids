@@ -60,6 +60,9 @@ public class LargeRaid {
     private Raid currentRaid;
     private int currentWave;
     private boolean raidersOutlined;
+    private Location raidSpawn;
+    private Location raidTarget;
+    private double raidTargetRadius;
 
     /**
      * Constructs a large raid object.
@@ -167,6 +170,9 @@ public class LargeRaid {
                     newRaiders.add(ravager);
                 }
             }
+        }
+        if (raidTarget != null) {
+            setRaiderTarget();
         }
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
             for (Raider raider : newRaiders)
@@ -421,6 +427,9 @@ public class LargeRaid {
     }
 
     private Location getWaveSpawnLocation() {
+        if (raidSpawn != null)
+            return raidSpawn;
+
         List<Raider> list = this.currentRaid.getRaiders();
         return list.isEmpty() ? null : list.get(0).getLocation();
     }
@@ -438,6 +447,37 @@ public class LargeRaid {
         AbstractBlockPositionWrapper blkPos = VersionUtil.getBlockPositionWrapper(getCenter());
         AbstractWorldServerWrapper level = VersionUtil.getCraftWorldWrapper(getCenter().getWorld()).getHandle();
         return level.getRaidAt(blkPos);
+    }
+
+    public Location getSpawnLocation() {
+        return raidSpawn;
+    }
+
+    public void setSpawnLocation(Location raidSpawn) {
+        this.raidSpawn = raidSpawn;
+    }
+
+    public Location getRaidTarget() {
+        return raidTarget;
+    }
+
+    public double getRaidTargetRadius() {
+        return raidTargetRadius;
+    }
+
+    public void setRaidTarget(Location target, double radius) {
+        this.raidTarget = target;
+        this.raidTargetRadius = radius;
+        if (currentRaid != null) {
+            setRaiderTarget();
+        }
+    }
+
+    private void setRaiderTarget() {
+        for (Raider raider : currentRaid.getRaiders()) {
+            AbstractRaiderWrapper wrapper = VersionUtil.getCraftRaiderWrapper(raider).getHandle();
+            wrapper.setRaiderTarget(raidTarget == null ? null : VersionUtil.getBlockPositionWrapper(raidTarget), raidTargetRadius);
+        }
     }
 
     public boolean addAttackGoal(int prio, boolean mustSee, Class<?> entityClass) {
