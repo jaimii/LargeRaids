@@ -72,7 +72,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         rider.getPersistentDataContainer().set(getKingNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        rider.setCustomName("§6§lArch-Evoker");
+        rider.setCustomName("§d§lArch-Evoker");
 
         BossBar bossBar = createBossBar(rider);
         createBossBar(ravager);
@@ -142,7 +142,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.ITALIC + "CO Banner");
+        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.ITALIC + "Raid Captain Banner");
         banner.setItemMeta(meta);
         return banner;
     }
