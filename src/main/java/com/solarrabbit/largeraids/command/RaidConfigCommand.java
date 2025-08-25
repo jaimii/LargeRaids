@@ -82,7 +82,7 @@ public class RaidConfigCommand implements CommandExecutor {
                     if (target == null) {
                         sender.sendMessage(ChatColor.YELLOW + this.plugin.getMessage("raid-config.no-target"));
                     } else {
-                        sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.current-center"),
+                        sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.current-target"),
                                 Math.round(target.getX()), Math.round(target.getY()), Math.round(target.getZ()),
                                 largeRaid.get().getRaidTargetRadius()));
                     }
@@ -91,7 +91,7 @@ public class RaidConfigCommand implements CommandExecutor {
 
                 if (args.length == 2 && args[1].equals("clear")) {
                     largeRaid.get().setRaidTarget(null, 0);
-                    sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raid-config.center-cleared"));
+                    sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raid-config.target-cleared"));
                     return true;
                 }
                 if (args.length < 5)
