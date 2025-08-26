@@ -90,3 +90,16 @@ raid-config:
   invalid-radius: Radius must be a positive number!
   invalid-navspeed: Path-find navigation speed must be a positive number!
   invalid-coordinates: Invalid coordinates entered!
+
+mob-control:
+  class-not-found: The specified class was not found!
+  invalid-entity-class: The specified class is not of Mob type!
+  invalid-range: Range must be a positive number!
+  invalid-coordinates: Invalid coordinates entered!
+  invalid-radius: Radius must be a positive number!
+  invalid-navspeed: Path-find navigation speed must be a positive number!
+  invalid-prio: Priority must be a non-negative integer!
+  pathfind-once-boolean: Path-find once option must be a boolean!
+  no-mobs-found: No mobs of class %s were found within %.1f blocks of (%d, %d, %d).
+  mobs-set: "%d mobs of class %s were set to path-find to %.1f blocks of (%d, %d, %d) with speed %.1f."
+  mobs-cleared: "%d mobs of class %s had their path-finding targets removed."

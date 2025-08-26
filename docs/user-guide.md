@@ -20,6 +20,7 @@ Refer to the [Configuration Guide](configurations.html).
 - `/lrattack [prio] [target_thru_walls] [entity_class]` - makes all raiders of the current wave attack an entity type
 - `/lrconfig spawn <x> <y> <z>` - for the current large raid, make all future waves spawn from this location
 - `/lrconfig target <x> <y> <z> <radius> <navSpeed>` - for the current large raid, make raiders path-find to this location within range of this radius
+- `/lrmobcontrol <entity_class> <range_from_player> <x> <y> <z> <radius> <navSpeed> <prio> <pathfind_once>` - selects all of the entity type in range of the player, and makes them path-find to the radius of the target. If pathfind_once is true, the target will be removed on arrival.
 
 ## Placeholders
 

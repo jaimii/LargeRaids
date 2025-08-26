@@ -143,6 +143,7 @@ public final class LargeRaids extends JavaPlugin {
         getCommand("lrattack").setExecutor(new RaiderAttackCommand(this));
         getCommand("lrconfig").setExecutor(new RaidConfigCommand(this));
         getCommand("lrconfig").setTabCompleter(new RaidConfigCommandCompleter());
+        getCommand("lrmobcontrol").setExecutor(new MobControlCommand(this));
     }
 
     private void loadCustomConfigs() {

@@ -44,6 +44,10 @@ commands:
     description: Configures some settings of the current large raid.
     usage: /<command> spawn <x> <y> <z>, /<command> target <x> <y> <z> <radius> <navSpeed>, /<command> [spawn | target] clear
     permission: largeraids.config
+  lrmobcontrol:
+    description: Makes the entity type in range of the player path-find to a given location. If pathfind_once is true, the target will be removed on arrival.
+    usage: /<command> <entity_class> <range_from_player> <x> <y> <z> <radius> <navSpeed> <prio> <pathfind_once>, /<command> <entity_class> <range_from_player> clear
+    permission: largeraids.mobcontrol
 
 permissions:
   largeraids.*:
@@ -60,6 +64,7 @@ permissions:
       largeraids.show: true
       largeraids.attack: true
       largeraids.config: true
+      largeraids.mobcontrol: true
   largeraids.reload:
     description: Allow access to lrreload command.
     default: op
@@ -89,4 +94,7 @@ permissions:
     default: op
   largeraids.config:
     description: Allow access to lrconfig command.
+    default: op
+  largeraids.mobcontrol:
+    description: Allow access to lrmobcontrol command.
     default: op
