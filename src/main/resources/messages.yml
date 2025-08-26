@@ -84,8 +84,9 @@ raid-config:
   current-custom-spawn: The wave spawn point is currently set to (%d, %d, %d).
   no-custom-spawn: This large raid is not using a specified spawn point.
   target-cleared: The raiders will no longer path-find to a specified target.
-  target-set: The raiders will now target (%d, %d, %d) with a range of %.1f blocks.
-  current-target: The raiders are targeting (%d, %d, %d) with a range of %.1f blocks.
+  target-set: The raiders will now target (%d, %d, %d) with a range of %.1f blocks, with a path-find speed of %.1f.
+  current-target: The raiders are targeting (%d, %d, %d) with a range of %.1f blocks, with a path-find speed of %.1f.
   no-target: The raiders do not have a specified target.
   invalid-radius: Radius must be a positive number!
+  invalid-navspeed: Path-find navigation speed must be a positive number!
   invalid-coordinates: Invalid coordinates entered!

@@ -42,7 +42,7 @@ commands:
     permission: largeraids.attack
   lrconfig:
     description: Configures some settings of the current large raid.
-    usage: /<command> spawn <x> <y> <z>, /<command> target <x> <y> <z> <radius>, /<command> [spawn | target] clear
+    usage: /<command> spawn <x> <y> <z>, /<command> target <x> <y> <z> <radius> <navSpeed>, /<command> [spawn | target] clear
     permission: largeraids.config
 
 permissions:

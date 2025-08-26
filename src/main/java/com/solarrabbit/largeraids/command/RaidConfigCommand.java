@@ -50,7 +50,7 @@ public class RaidConfigCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.YELLOW + this.plugin.getMessage("raid-config.no-custom-spawn"));
                     } else {
                         sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.current-custom-spawn"),
-                                Math.round(spawn.getX()), Math.round(spawn.getY()), Math.round(spawn.getZ())));
+                                (int)Math.floor(spawn.getX()), (int)Math.floor(spawn.getY()), (int)Math.floor(spawn.getZ())));
                     }
                     return true;
                 }
@@ -60,7 +60,7 @@ public class RaidConfigCommand implements CommandExecutor {
                     sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raid-config.custom-spawn-cleared"));
                     return true;
                 }
-                if (args.length < 4)
+                if (args.length != 4)
                     return false;
 
                 try {
@@ -70,7 +70,7 @@ public class RaidConfigCommand implements CommandExecutor {
                     Location spawn = new Location(location.getWorld(), x, y, z);
                     largeRaid.get().setSpawnLocation(spawn);
                     sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.custom-spawn-set"),
-                            Math.round(spawn.getX()), Math.round(spawn.getY()), Math.round(spawn.getZ())));
+                            (int)Math.floor(spawn.getX()), (int)Math.floor(spawn.getY()), (int)Math.floor(spawn.getZ())));
                     return true;
                 } catch (NumberFormatException e) {
                     sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raid-config.invalid-coordinates"));
@@ -83,18 +83,18 @@ public class RaidConfigCommand implements CommandExecutor {
                         sender.sendMessage(ChatColor.YELLOW + this.plugin.getMessage("raid-config.no-target"));
                     } else {
                         sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.current-target"),
-                                Math.round(target.getX()), Math.round(target.getY()), Math.round(target.getZ()),
-                                largeRaid.get().getRaidTargetRadius()));
+                                (int)Math.floor(target.getX()), (int)Math.floor(target.getY()), (int)Math.floor(target.getZ()),
+                                largeRaid.get().getRaidTargetRadius(), largeRaid.get().getRaidTargetNavSpeed()));
                     }
                     return true;
                 }
 
                 if (args.length == 2 && args[1].equals("clear")) {
-                    largeRaid.get().setRaidTarget(null, 0);
+                    largeRaid.get().setRaidTarget(null, 0, 0);
                     sender.sendMessage(ChatColor.GREEN + this.plugin.getMessage("raid-config.target-cleared"));
                     return true;
                 }
-                if (args.length < 5)
+                if (args.length != 6)
                     return false;
 
                 double x;
@@ -109,21 +109,35 @@ public class RaidConfigCommand implements CommandExecutor {
                     return false;
                 }
 
+                double radius;
                 try {
-                    double radius = Double.parseDouble(args[4]);
+                    radius = Double.parseDouble(args[4]);
                     if (radius < 0) {
                         sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raid-config.invalid-radius"));
                         return false;
                     }
-                    Location target = new Location(location.getWorld(), x, y, z);
-                    largeRaid.get().setRaidTarget(target, radius);
-                    sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.target-set"),
-                            Math.round(target.getX()), Math.round(target.getY()), Math.round(target.getZ()), radius));
-                    return true;
                 } catch (NumberFormatException e) {
                     sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raid-config.invalid-radius"));
                     return false;
                 }
+
+                double navSpeed;
+                try {
+                    navSpeed = Double.parseDouble(args[5]);
+                    if (navSpeed <= 0) {
+                        sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raid-config.invalid-navspeed"));
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(ChatColor.RED + this.plugin.getMessage("raid-config.invalid-navspeed"));
+                    return false;
+                }
+
+                Location target = new Location(location.getWorld(), x, y, z);
+                largeRaid.get().setRaidTarget(target, radius, navSpeed);
+                sender.sendMessage(ChatColor.GREEN + String.format(this.plugin.getMessage("raid-config.target-set"),
+                        (int)Math.floor(target.getX()), (int)Math.floor(target.getY()), (int)Math.floor(target.getZ()), radius, navSpeed));
+                return true;
             default:
                 return false;
         }
@@ -135,11 +149,11 @@ public class RaidConfigCommand implements CommandExecutor {
         double relative = pos.length() == 1 ? 0 : Double.parseDouble(pos.substring(1));
         switch (type) {
             case 0:
-                return relative + Math.round(loc.getX() * 1000) / 1000D;
+                return relative + loc.getX();
             case 1:
-                return relative + Math.round(loc.getY() * 1000) / 1000D;
+                return relative + loc.getY();
             case 2:
-                return relative + Math.round(loc.getZ() * 1000) / 1000D;
+                return relative + loc.getZ();
             default:
                 return 0;
         }

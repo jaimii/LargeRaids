@@ -24,19 +24,19 @@ public class RaiderWrapper implements AbstractRaiderWrapper {
     }
 
     @Override
-    public void setRaiderTarget(AbstractBlockPositionWrapper pos, double radius) {
+    public void setRaiderTarget(AbstractBlockPositionWrapper pos, double radius, double navSpeed) {
         BlockPos blockPos = pos == null ? null : ((BlockPositionWrapper) pos).blockPos;
 
         for (WrappedGoal goal : raider.goalSelector.getAvailableGoals()) {
             if (goal.getGoal().getClass() == PathfindToRaidGoal.class) {
                 int prio = goal.getPriority();
                 raider.goalSelector.removeGoal(goal.getGoal());
-                PathfindToTargetGoal<Raider> newGoal = new PathfindToTargetGoal<>(raider);
-                newGoal.setTargetPos(blockPos, radius);
+                RaiderPathfindToTargetGoal<Raider> newGoal = new RaiderPathfindToTargetGoal<>(raider);
+                newGoal.setTargetPos(blockPos, radius, navSpeed);
                 raider.goalSelector.addGoal(prio, newGoal);
                 break;
-            } else if (goal.getGoal() instanceof PathfindToTargetGoal pathfindGoal) {
-                pathfindGoal.setTargetPos(blockPos, radius);
+            } else if (goal.getGoal() instanceof RaiderPathfindToTargetGoal raiderGoal) {
+                raiderGoal.setTargetPos(blockPos, radius, navSpeed);
                 break;
             }
         }

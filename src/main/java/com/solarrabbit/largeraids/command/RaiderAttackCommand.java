@@ -27,7 +27,7 @@ public class RaiderAttackCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length < 3)
+        if (args.length != 3)
             return false;
 
         if (!(sender instanceof Player)) {

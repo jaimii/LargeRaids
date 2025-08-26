@@ -16,23 +16,26 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.entity.raid.Raids;
 import net.minecraft.world.phys.Vec3;
 
-public class PathfindToTargetGoal<T extends Raider> extends PathfindToRaidGoal<T> {
+public class RaiderPathfindToTargetGoal<T extends Raider> extends PathfindToRaidGoal<T> {
     private static final int RECRUITMENT_SEARCH_TICK_DELAY = 20;
-    private static final float SPEED_MODIFIER = 1.0F;
     private final T mob;
     private int recruitmentTick;
     private BlockPos targetPos;
     private double targetRadius;
+    private double navSpeed;
+    private boolean changed;
 
-    public PathfindToTargetGoal(T mob) {
+    public RaiderPathfindToTargetGoal(T mob) {
         super(mob);
         this.mob = mob;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
-    public void setTargetPos(BlockPos pos, double radius) {
+    public void setTargetPos(BlockPos pos, double radius, double navSpeed) {
         this.targetPos = pos;
         this.targetRadius = radius;
+        this.navSpeed = pos == null ? 1 : navSpeed;
+        this.changed = true;
     }
 
     private boolean isCloseToGoal() {
@@ -65,11 +68,16 @@ public class PathfindToTargetGoal<T extends Raider> extends PathfindToRaidGoal<T
                 this.recruitNearby(currentRaid);
             }
 
-            if (!this.mob.isPathFinding() || targetPos != null) {
-                Vec3 posTowards = DefaultRandomPos.getPosTowards(this.mob, 15, 4, Vec3.atBottomCenterOf(
-                        targetPos != null ? targetPos : currentRaid.getCenter()), (float) (Math.PI / 2));
+            if (this.changed) { 
+                this.mob.getNavigation().stop();
+                this.changed = false;
+            }
+            if (!this.mob.isPathFinding()) {
+                Vec3 posTowards = targetPos != null ? targetPos.getBottomCenter()
+                        : DefaultRandomPos.getPosTowards(this.mob, 15, 4, Vec3.atBottomCenterOf(
+                        currentRaid.getCenter()), (float) (Math.PI / 2));
                 if (posTowards != null) {
-                    this.mob.getNavigation().moveTo(posTowards.x, posTowards.y, posTowards.z, SPEED_MODIFIER);
+                    this.mob.getNavigation().moveTo(posTowards.x, posTowards.y, posTowards.z, navSpeed);
                 }
             }
         }

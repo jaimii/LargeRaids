@@ -63,6 +63,7 @@ public class LargeRaid {
     private Location raidSpawn;
     private Location raidTarget;
     private double raidTargetRadius;
+    private double raidTargetNavSpeed;
 
     /**
      * Constructs a large raid object.
@@ -465,18 +466,25 @@ public class LargeRaid {
         return raidTargetRadius;
     }
 
-    public void setRaidTarget(Location target, double radius) {
+    public double getRaidTargetNavSpeed() {
+        return raidTargetNavSpeed;
+    }
+
+    public void setRaidTarget(Location target, double radius, double navSpeed) {
         this.raidTarget = target;
         this.raidTargetRadius = radius;
+        this.raidTargetNavSpeed = navSpeed;
         if (currentRaid != null) {
             setRaiderTarget();
         }
     }
 
     private void setRaiderTarget() {
+        AbstractBlockPositionWrapper target = raidTarget == null ? null
+                : VersionUtil.getBlockPositionWrapper(raidTarget);
         for (Raider raider : currentRaid.getRaiders()) {
             AbstractRaiderWrapper wrapper = VersionUtil.getCraftRaiderWrapper(raider).getHandle();
-            wrapper.setRaiderTarget(raidTarget == null ? null : VersionUtil.getBlockPositionWrapper(raidTarget), raidTargetRadius);
+            wrapper.setRaiderTarget(target, raidTargetRadius, raidTargetNavSpeed);
         }
     }
 
