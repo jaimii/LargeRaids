@@ -30,7 +30,7 @@ public class WorldServerWrapper implements AbstractWorldServerWrapper {
         int count = 0;
         for (Mob mob : mobs)
             for (WrappedGoal goal : mob.goalSelector.getAvailableGoals()) {
-                if (goal.getGoal().getClass() == PathfindToTargetGoal.class) {
+                if (goal.getGoal() instanceof PathfindToTargetGoal) {
                     mob.goalSelector.removeGoal(goal.getGoal());
                     count++;
                     break;
@@ -51,7 +51,12 @@ public class WorldServerWrapper implements AbstractWorldServerWrapper {
                 searchPos.getX() + range, searchPos.getY() + range, searchPos.getZ() + range);
         List<? extends Mob> mobs = server.getEntitiesOfClass((Class<? extends Mob>) entityClass, aabb);
         for (Mob mob : mobs) {
-            mob.goalSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof PathfindToTargetGoal);
+            for (WrappedGoal goal : mob.goalSelector.getAvailableGoals()) {
+                if (goal.getGoal() instanceof PathfindToTargetGoal) {
+                    mob.goalSelector.removeGoal(goal.getGoal());
+                    break;
+                }
+            }
 
             PathfindToTargetGoal goal = new PathfindToTargetGoal(mob);
             goal.setTargetPos(((BlockPositionWrapper) target).blockPos, radius, navSpeed, pathfindOnce);
