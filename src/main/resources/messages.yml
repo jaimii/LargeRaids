@@ -101,5 +101,6 @@ mob-control:
   invalid-prio: Priority must be a non-negative integer!
   pathfind-once-boolean: Path-find once option must be a boolean!
   no-mobs-found: No mobs of class %s were found within %.1f blocks of (%d, %d, %d).
+  no-mobs-cleared: No mobs of class %s were found within %.1f blocks of (%d, %d, %d) with targets set.
   mobs-set: "%d mobs of class %s were set to path-find to %.1f blocks of (%d, %d, %d) with speed %.1f."
   mobs-cleared: "%d mobs of class %s had their path-finding targets removed."

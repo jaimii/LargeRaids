@@ -8,6 +8,7 @@ import com.solarrabbit.largeraids.nms.AbstractWorldServerWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.phys.AABB;
 
 public class WorldServerWrapper implements AbstractWorldServerWrapper {
@@ -27,10 +28,14 @@ public class WorldServerWrapper implements AbstractWorldServerWrapper {
                 searchPos.getX() + range, searchPos.getY() + range, searchPos.getZ() + range);
         List<? extends Mob> mobs = server.getEntitiesOfClass((Class<? extends Mob>) entityClass, aabb);
         int count = 0;
-        for (Mob mob : mobs) {
-            if (mob.goalSelector.getAvailableGoals().removeIf(goal -> goal.getGoal() instanceof PathfindToTargetGoal))
-                count++;
-        }
+        for (Mob mob : mobs)
+            for (WrappedGoal goal : mob.goalSelector.getAvailableGoals()) {
+                if (goal.getGoal().getClass() == PathfindToTargetGoal.class) {
+                    mob.goalSelector.removeGoal(goal.getGoal());
+                    count++;
+                    break;
+                }
+            }
 
         return count;
     }

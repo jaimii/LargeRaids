@@ -60,7 +60,7 @@ public class MobControlCommand implements CommandExecutor {
             if (result == -1) {
                 sender.sendMessage(ChatColor.RED + this.plugin.getMessage("mob-control.invalid-entity-class"));
             } else if (result == 0) {
-                sender.sendMessage(ChatColor.YELLOW + String.format(this.plugin.getMessage("mob-control.no-mobs-found"),
+                sender.sendMessage(ChatColor.YELLOW + String.format(this.plugin.getMessage("mob-control.no-mobs-cleared"),
                         entityClass.getSimpleName(), range, (int)Math.floor(search.getX()),
                         (int)Math.floor(search.getY()), (int)Math.floor(search.getZ())));
             } else {
