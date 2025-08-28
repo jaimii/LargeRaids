@@ -59,7 +59,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
     @Override
     public KingRaider spawn(Location location) {
         Ravager ravager = (Ravager) location.getWorld().spawnEntity(location, EntityType.RAVAGER);
-        ravager.setCustomName("§c§lJuggernaut Ravager");
+        ravager.setCustomName("§cJuggernaut Ravager");
         ravager.getAttribute(Attribute.MAX_HEALTH).setBaseValue(ravagerHealth);
         ravager.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(ravagerDamage);
         ravager.setHealth(ravagerHealth);
@@ -72,7 +72,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         rider.getPersistentDataContainer().set(getKingNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        rider.setCustomName("§d§lArch-Evoker");
+        rider.setCustomName("§dRaid Commander");
 
         BossBar bossBar = createBossBar(rider);
         createBossBar(ravager);
@@ -142,7 +142,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.ITALIC + "Raid Captain Banner");
+        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.ITALIC + "Raid Commander Banner");
         banner.setItemMeta(meta);
         return banner;
     }
