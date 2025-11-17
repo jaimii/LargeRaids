@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.ProfilePublicKey;
 
 public class PlayerEntityWrapper implements AbstractPlayerEntityWrapper {
     final ServerPlayer player;
+    public ServerPlayer level;
 
     public PlayerEntityWrapper(AbstractMinecraftServerWrapper server, AbstractWorldServerWrapper world,
             GameProfile profile, ProfilePublicKey publicKey) {
