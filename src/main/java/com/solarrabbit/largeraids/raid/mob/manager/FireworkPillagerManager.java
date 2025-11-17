@@ -52,7 +52,7 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
         equipment.setHelmetDropChance(1.0f);
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
         pdc.set(getPillagerNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        entity.setCustomName("Firework Pillager");
+        entity.setCustomName("§eArtillery Pillager");
         return new FireworkPillager(entity);
     }
 
@@ -101,7 +101,7 @@ public class FireworkPillagerManager implements CustomRaiderManager, Listener {
         meta.addPattern(new Pattern(DyeColor.YELLOW, PatternType.FLOWER));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.ITALIC + "Firework Pillager Banner");
+        meta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.ITALIC + "Artillery Pillager Banner");
         banner.setItemMeta(meta);
         return banner;
     }
