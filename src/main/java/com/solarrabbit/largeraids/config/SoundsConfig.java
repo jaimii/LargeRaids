@@ -2,8 +2,6 @@ package com.solarrabbit.largeraids.config;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -33,7 +31,16 @@ public class SoundsConfig {
         return defeatSound;
     }
 
-    private Sound getSound(@Nonnull String name) {
-        return Registry.SOUNDS.get(new NamespacedKey(NamespacedKey.MINECRAFT, name));
+    private Sound getSound(@Nonnull String name)
+    {
+        try {
+
+            return Sound.valueOf(name);
+
+        } catch (IllegalArgumentException ex) {
+
+            return null;
+
+        }
     }
 }
