@@ -21,7 +21,8 @@ In build.gradle.kts, change the variable mcVersion to the new version. Go to Lar
 
 In addition to fixing errors, you should look at the obfuscated mapping for the ```groupsSpawned``` variable over at [mappings.dev](https://mappings.dev/) in class ```net.minecraft.world.entity.raid.Raid```. If it is not ```I```, then you should change it at ```RaidWrapper.setGroupsSpawned()```.
 
-For 1.21.5, the mapping is here: https://mappings.dev/1.21.5/net/minecraft/world/entity/raid/Raid.html
+For 1.21.8, the mapping is here: https://mappings.dev/1.21.8/net/minecraft/world/entity/raid/Raid.html
+Other additional obfuscated mappings may change in between versions, for this version, the ServerLevel and ServerPlayer mappings have been changed in the RaidWrapper. If you wish to update the plugin for the latest versions, you must double check the stacktrace for fix errors in the source code.
 
 ## Known Bugs
 For any large raid, the minimum Hero of the Village effect given is level 2. This affects all versions of LargeRaids (including versions from the original mod author), and is caused by vanilla giving out the effect before ```RaidFinishEvent``` is fired.
