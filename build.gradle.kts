@@ -2,14 +2,14 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   `java-library`
-  id("io.papermc.paperweight.userdev") version "2.0.0-beta.18"
-  id("com.gradleup.shadow") version "9.0.2"
+  id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
+  id("com.gradleup.shadow") version "9.3.2"
 }
 
 group = "com.solarrabbit"
-version = "1.11.8"
+version = "1.12.0"
 description = "LargeRaids"
-val mcVersion = "1.21.7"
+val mcVersion = "1.21.11"
 
 java {
   // Configure the java toolchain. This allows gradle to auto-provision JDK 21 on systems that only have JDK 8 installed for example.
@@ -30,8 +30,8 @@ tasks.withType<ShadowJar> {
 dependencies {
   paperweight.paperDevBundle(mcVersion + "-R0.1-SNAPSHOT")
   shadow("org.bstats:bstats-bukkit:3.1.0")
-  implementation("me.clip:placeholderapi:2.11.7")
-  implementation("io.lumine:Mythic-Dist:5.10.0")
+  implementation("me.clip:placeholderapi:2.12.2")
+  implementation("io.lumine:Mythic-Dist:5.11.2")
 }
 
 tasks {
