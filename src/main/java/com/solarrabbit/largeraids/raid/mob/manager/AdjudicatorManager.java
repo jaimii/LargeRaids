@@ -5,16 +5,21 @@ import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
 import com.solarrabbit.largeraids.raid.mob.Adjudicator;
 import com.solarrabbit.largeraids.raid.mob.AdjudicatorRider;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,8 +36,74 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AdjudicatorManager implements CustomRaiderManager, Listener {
     private double health;
     private double horseHealth;
+    private final java.util.WeakHashMap<Vindicator, Long> attackCooldowns = new java.util.WeakHashMap<>();
 
     public AdjudicatorManager() {
+        LargeRaids plugin = JavaPlugin.getPlugin(LargeRaids.class);
+        startTickTask(plugin);
+    }
+
+    private void startTickTask(JavaPlugin plugin) {
+        // Runs a lightweight proximity check task every 2 ticks (10 times a second)
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for (org.bukkit.World world : Bukkit.getWorlds()) {
+                for (Vindicator vindicator : world.getEntitiesByClass(Vindicator.class)) {
+                    if (vindicator.isDead()) continue;
+                    if (isAdjudicator(vindicator)) {
+                        handleAdjudicatorAttack(vindicator);
+                    }
+                }
+            }
+        }, 0, 2);
+    }
+
+    private void handleAdjudicatorAttack(Vindicator vindicator) {
+        LivingEntity target = vindicator.getTarget();
+        if (target == null || target.isDead()) return;
+
+        // Skip creative/spectator players
+        if (target instanceof Player) {
+            Player p = (Player) target;
+            if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
+                return;
+            }
+        }
+
+        double distanceSq = vindicator.getLocation().distanceSquared(target.getLocation());
+        // Jousting connection range (covers horse size collision & rider height offset perfectly)
+        if (distanceSq <= 12.0) {
+            long now = System.currentTimeMillis();
+            long lastAttack = attackCooldowns.getOrDefault(vindicator, 0L);
+            if ((now - lastAttack) >= 1200) { // Cooldown of 1.2 seconds
+                performSpearAttack(vindicator, target);
+                attackCooldowns.put(vindicator, now);
+            }
+        }
+    }
+
+    private void performSpearAttack(Vindicator vindicator, LivingEntity target) {
+        // Swing hand & play spear sounds
+        vindicator.swingMainHand();
+        vindicator.getWorld().playSound(vindicator.getLocation(), Sound.ITEM_TRIDENT_THROW, 1.0F, 1.2F);
+        vindicator.getWorld().spawnParticle(org.bukkit.Particle.SWEEP_ATTACK, target.getLocation().add(0, 1, 0), 1);
+
+        double damage = 6.0;
+        if (vindicator.getAttribute(Attribute.ATTACK_DAMAGE) != null) {
+            damage = vindicator.getAttribute(Attribute.ATTACK_DAMAGE).getValue();
+        }
+
+        // Deal 1.5x damage on horseback to simulate jousting momentum
+        if (vindicator.isInsideVehicle()) {
+            damage *= 1.5;
+            vindicator.getWorld().playSound(vindicator.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
+            vindicator.getWorld().spawnParticle(org.bukkit.Particle.CRIT, target.getLocation().add(0, 1, 0), 5, 0.2, 0.2, 0.2, 0.1);
+        }
+
+        target.damage(damage, vindicator);
+    }
+
+    private boolean isAdjudicator(Vindicator vindicator) {
+        return vindicator.getPersistentDataContainer().has(getAdjudicatorNamespacedKey(), PersistentDataType.BYTE);
     }
 
     @Override
@@ -110,11 +181,9 @@ public class AdjudicatorManager implements CustomRaiderManager, Listener {
 
     private void injectSpearUseGoal(Vindicator vindicator) {
         try {
-            // Get NMS handle of Vindicator
             java.lang.reflect.Method getHandleMethod = vindicator.getClass().getMethod("getHandle");
             Object nmsVindicator = getHandleMethod.invoke(vindicator);
 
-            // Traverse up classes to find the 'goalSelector' field on Mob
             java.lang.reflect.Field goalSelectorField = null;
             Class<?> currentClass = nmsVindicator.getClass();
             while (currentClass != null && goalSelectorField == null) {
@@ -129,7 +198,8 @@ public class AdjudicatorManager implements CustomRaiderManager, Listener {
                 goalSelectorField.setAccessible(true);
                 Object goalSelector = goalSelectorField.get(nmsVindicator);
 
-                // Create the SpearUseGoal instance
+                removeMeleeAttackGoals(goalSelector);
+
                 Object spearGoal = createSpearUseGoal(nmsVindicator);
                 if (spearGoal != null) {
                     java.lang.reflect.Method addGoalMethod = null;
@@ -139,7 +209,6 @@ public class AdjudicatorManager implements CustomRaiderManager, Listener {
                             break;
                         }
                     }
-                    // Insert at priority 2 (corresponds to high-priority combat behaviors)
                     if (addGoalMethod != null) {
                         addGoalMethod.invoke(goalSelector, 2, spearGoal);
                     }
@@ -150,15 +219,51 @@ public class AdjudicatorManager implements CustomRaiderManager, Listener {
         }
     }
 
+    private void removeMeleeAttackGoals(Object goalSelector) {
+        try {
+            java.lang.reflect.Field availableGoalsField = null;
+            Class<?> selectorClass = goalSelector.getClass();
+            while (selectorClass != null && availableGoalsField == null) {
+                try {
+                    availableGoalsField = selectorClass.getDeclaredField("availableGoals");
+                } catch (NoSuchFieldException e) {
+                    selectorClass = selectorClass.getSuperclass();
+                }
+            }
+
+            if (availableGoalsField != null) {
+                availableGoalsField.setAccessible(true);
+                java.util.Set<?> availableGoals = (java.util.Set<?>) availableGoalsField.get(goalSelector);
+
+                java.util.List<Object> toRemove = new java.util.ArrayList<>();
+                for (Object prioritizedGoal : availableGoals) {
+                    java.lang.reflect.Method getGoalMethod = prioritizedGoal.getClass().getMethod("getGoal");
+                    Object underlyingGoal = getGoalMethod.invoke(prioritizedGoal);
+                    String className = underlyingGoal.getClass().getName();
+
+                    if (className.contains("MeleeAttack") || className.contains("JohnnyAttack")) {
+                        toRemove.add(underlyingGoal);
+                    }
+                }
+
+                java.lang.reflect.Method removeGoalMethod = goalSelector.getClass().getMethod("removeGoal", Class.forName("net.minecraft.world.entity.ai.goal.Goal"));
+                for (Object goal : toRemove) {
+                    removeGoalMethod.invoke(goalSelector, goal);
+                }
+            }
+        } catch (Exception e) {
+            JavaPlugin.getPlugin(LargeRaids.class).getLogger().warning("Failed to remove native MeleeAttackGoals: " + e.getMessage());
+        }
+    }
+
     private Object createSpearUseGoal(Object nmsVindicator) {
         try {
-            // Find the 1.21.11 Spear Use Goal class
             Class<?> goalClass = Class.forName("net.minecraft.world.entity.ai.goal.SpearUseGoal");
-            for (java.lang.reflect.Constructor<?> ctor : goalClass.getConstructors()) {
+            java.lang.reflect.Constructor<?>[] ctors = goalClass.getConstructors();
+            for (java.lang.reflect.Constructor<?> ctor : ctors) {
                 Class<?>[] params = ctor.getParameterTypes();
                 if (params.length == 0) continue;
 
-                // Ensure target constructor matches PathfinderMob/Mob and compatible subparameters
                 if (params[0].isAssignableFrom(nmsVindicator.getClass())) {
                     if (params.length == 1) {
                         return ctor.newInstance(nmsVindicator);
@@ -167,6 +272,23 @@ public class AdjudicatorManager implements CustomRaiderManager, Listener {
                     } else if (params.length == 4 && params[1] == double.class && params[2] == int.class && (params[3] == float.class || params[3] == double.class)) {
                         Object radius = params[3] == float.class ? 15.0F : 15.0;
                         return ctor.newInstance(nmsVindicator, 1.25, 20, radius);
+                    } else {
+                        Object[] args = new Object[params.length];
+                        args[0] = nmsVindicator;
+                        for (int i = 1; i < params.length; i++) {
+                            if (params[i] == double.class) {
+                                args[i] = 1.25;
+                            } else if (params[i] == float.class) {
+                                args[i] = 15.0F;
+                            } else if (params[i] == int.class) {
+                                args[i] = 20;
+                            } else if (params[i] == boolean.class) {
+                                args[i] = false;
+                            } else {
+                                args[i] = null;
+                            }
+                        }
+                        return ctor.newInstance(args);
                     }
                 }
             }

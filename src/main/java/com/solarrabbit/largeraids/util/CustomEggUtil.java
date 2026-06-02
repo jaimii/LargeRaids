@@ -56,7 +56,7 @@ public class CustomEggUtil {
                 case "adjudicator":
                     material = Material.VINDICATOR_SPAWN_EGG;
                     displayName = "Adjudicator Spawn Egg";
-                    color = NamedTextColor.DARK_GREEN;
+                    color = NamedTextColor.GOLD;
                     break;
                 default:
                     return null;
