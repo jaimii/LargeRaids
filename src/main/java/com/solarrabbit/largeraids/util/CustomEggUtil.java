@@ -64,6 +64,10 @@ public class CustomEggUtil {
             meta.displayName(Component.text(displayName, color).decoration(TextDecoration.ITALIC, false));
             NamespacedKey key = new NamespacedKey(plugin, PDC_KEY);
             meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, variant); // Save original string
+
+            // Forces the spawn egg item stack to glow as if it is enchanted
+            meta.setEnchantmentGlintOverride(true);
+
             egg.setItemMeta(meta);
         }
         return egg;

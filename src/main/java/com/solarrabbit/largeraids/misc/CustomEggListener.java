@@ -108,10 +108,12 @@ public class CustomEggListener implements Listener {
         String lowerVariant = variant.toLowerCase(java.util.Locale.ROOT);
 
         if (lowerVariant.startsWith("mythic:")) {
-            String mobName = variant.substring(7); // Parse the actual mob ID
+            String mobName = variant.substring(7);
             MythicMob type = MythicBukkit.inst().getMobManager().getMythicMob(mobName).orElse(null);
             if (type != null) {
-                new MythicRaiderManager().spawn(loc, type);
+                MythicRaiderManager manager = new MythicRaiderManager();
+                manager.loadSettings(plugin.getCustomMobsConfig());
+                manager.spawn(loc, type);
             } else {
                 plugin.getLogger().warning("Failed to spawn MythicRaider. Unknown MythicMob: " + mobName);
             }
@@ -120,16 +122,24 @@ public class CustomEggListener implements Listener {
 
         switch (lowerVariant) {
             case "necromancer":
-                new NecromancerManager().spawn(loc);
+                NecromancerManager necromancerManager = new NecromancerManager();
+                necromancerManager.loadSettings(plugin.getCustomMobsConfig());
+                necromancerManager.spawn(loc);
                 break;
             case "bomber":
-                new BomberManager().spawn(loc);
+                BomberManager bomberManager = new BomberManager();
+                bomberManager.loadSettings(plugin.getCustomMobsConfig());
+                bomberManager.spawn(loc);
                 break;
             case "firework":
-                new FireworkPillagerManager().spawn(loc);
+                FireworkPillagerManager fireworkManager = new FireworkPillagerManager();
+                fireworkManager.loadSettings(plugin.getCustomMobsConfig());
+                fireworkManager.spawn(loc);
                 break;
             case "king":
-                new KingRaiderManager().spawn(loc);
+                KingRaiderManager kingManager = new KingRaiderManager();
+                kingManager.loadSettings(plugin.getCustomMobsConfig());
+                kingManager.spawn(loc);
                 break;
             default:
                 plugin.getLogger().warning("Attempted to spawn unknown custom variant: " + variant);
