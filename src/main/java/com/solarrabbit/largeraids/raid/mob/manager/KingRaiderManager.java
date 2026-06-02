@@ -2,6 +2,7 @@ package com.solarrabbit.largeraids.raid.mob.manager;
 
 import com.solarrabbit.largeraids.LargeRaids;
 import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
+import com.solarrabbit.largeraids.config.custommobs.KingRaiderConfig;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
 import com.solarrabbit.largeraids.util.VersionUtil;
 
@@ -15,11 +16,12 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.boss.BossBar;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -50,7 +52,6 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class KingRaiderManager implements BossRaiderManager, Listener {
@@ -59,6 +60,8 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
     private double fangDamage;
     private int fireTicks;
     private int regenLevel;
+    private double evokerHealth;
+    private int evokerRegenLevel;
     private static final EntityType RIDER_TYPE = EntityType.EVOKER;
 
     public KingRaiderManager() {
@@ -71,6 +74,8 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         fangDamage = config.getKingRaiderConfig().getFangDamage();
         fireTicks = config.getKingRaiderConfig().getFireTicks();
         regenLevel = config.getKingRaiderConfig().getRegenLevel();
+        evokerHealth = config.getKingRaiderConfig().getEvokerHealth();
+        evokerRegenLevel = config.getKingRaiderConfig().getEvokerRegenLevel();
     }
 
     @Override
@@ -82,7 +87,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         ravager.setHealth(ravagerHealth);
         ravager.getPersistentDataContainer().set(getJuggernautNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
 
-        // Initialize the first 100 HP threshold trigger point in PDC
         NamespacedKey thresholdKey = new NamespacedKey(JavaPlugin.getPlugin(LargeRaids.class), "juggernaut_next_trigger");
         ravager.getPersistentDataContainer().set(thresholdKey, PersistentDataType.DOUBLE, ravagerHealth - 100.0);
 
@@ -90,11 +94,18 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             ravager.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, regenLevel));
 
         Spellcaster rider = (Spellcaster) location.getWorld().spawnEntity(location, RIDER_TYPE);
+        rider.getAttribute(Attribute.MAX_HEALTH).setBaseValue(evokerHealth);
+        rider.setHealth(evokerHealth);
+
         EntityEquipment equipment = rider.getEquipment();
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         rider.getPersistentDataContainer().set(getKingNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        rider.setCustomName("§dRaid Commander");
+        rider.setCustomName("§cRaid §5Captain");
+
+        if (evokerRegenLevel >= 0) {
+            rider.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, evokerRegenLevel, false, false, false));
+        }
 
         BossBar bossBar = createBossBar(rider);
         createBossBar(ravager);
@@ -103,7 +114,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         return new KingRaider(rider, ravager, bossBar);
     }
 
-    // --- PREVENT ALL RAVAGERS FROM TAKING DAMAGE FROM RAIDER FELLOWS ---
     @EventHandler
     private void onRavagerTakeDamage(EntityDamageByEntityEvent evt) {
         if (!(evt.getEntity() instanceof Ravager))
@@ -112,7 +122,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         Entity damager = evt.getDamager();
         Entity realDamager = damager;
 
-        // Handle Projectiles (arrows, firework rockets, etc.)
         if (damager instanceof Projectile) {
             ProjectileSource source = ((Projectile) damager).getShooter();
             if (source instanceof Entity) {
@@ -120,7 +129,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             }
         }
 
-        // Handle Evoker Fangs
         if (damager instanceof EvokerFangs) {
             LivingEntity owner = ((EvokerFangs) damager).getOwner();
             if (owner != null) {
@@ -128,13 +136,11 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             }
         }
 
-        // Cancel if the damager (or projectile shooter/fangs owner) is a Raider/illager
         if (realDamager instanceof Raider) {
             evt.setCancelled(true);
         }
     }
 
-    // --- CONDITION 1: TRIGGERS ON EVERY 100 HP LOSS ---
     @EventHandler
     private void onJuggernautDamage(EntityDamageEvent evt) {
         if (!(evt.getEntity() instanceof Ravager))
@@ -149,7 +155,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         double nextHealth = currentHealth - finalDamage;
 
         if (nextHealth <= 0)
-            return; // Juggernaut is dead, do not trigger
+            return;
 
         PersistentDataContainer pdc = ravager.getPersistentDataContainer();
         NamespacedKey thresholdKey = new NamespacedKey(JavaPlugin.getPlugin(LargeRaids.class), "juggernaut_next_trigger");
@@ -160,7 +166,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
                 : maxHealth - 100.0;
 
         if (nextHealth <= nextTrigger) {
-            // Find a valid target nearby
             LivingEntity target = ravager.getTarget();
             if (target == null) {
                 double scanRadius = 15.0;
@@ -179,7 +184,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
                 triggerSonicBoomAttack(ravager, target);
             }
 
-            // Adjust threshold boundary (handles multi-100 drops from single massive hits safely)
             while (nextHealth <= nextTrigger) {
                 nextTrigger -= 100.0;
             }
@@ -187,7 +191,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         }
     }
 
-    // --- CONDITION 2: TRIGGERS ON SHIELD STUN ---
     @EventHandler
     private void onJuggernautShieldBlock(EntityDamageByEntityEvent evt) {
         if (!(evt.getDamager() instanceof Ravager))
@@ -202,99 +205,59 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
 
         Player player = (Player) evt.getEntity();
 
-        // Check if player blocked using a shield
         if (player.isBlocking()) {
-            // Check the 180-degree blocking arc facing the Juggernaut via dot product
             Vector playerLook = player.getLocation().getDirection().setY(0).normalize();
             Vector toRavager = ravager.getLocation().toVector().subtract(player.getLocation().toVector()).setY(0).normalize();
             double dot = playerLook.dot(toRavager);
 
-            if (dot > 0.0) { // Shield block successful
-                // 1. Instantly play the dazed stun animation (shaking head side-to-side)
+            if (dot > 0.0) {
                 ravager.playEffect(EntityEffect.RAVAGER_STUNNED);
-
-                // 2. Schedule the charging sound after 20 ticks (1 second into the stun)
-                // This ensures the beam fires at exactly 40 ticks, syncing with the recovery scream
-                Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
-                    if (!ravager.isDead() && !player.isDead()) {
-                        triggerSonicBoomAttack(ravager, player);
-                    }
-                }, 20L);
+                triggerSonicBoomAttack(ravager, player);
             }
         }
     }
 
-    // --- THE PIERCING SONIC BEAM ATTACK ---
     private void triggerSonicBoomAttack(Ravager ravager, LivingEntity target) {
         if (target == null) return;
         final LivingEntity finalTarget = target;
 
-        // Play the dazed, head-shaking animation as a charge-up visual
         ravager.playEffect(EntityEffect.RAVAGER_STUNNED);
-
-        // Play the Warden Sonic Charge charging sound immediately
         ravager.getWorld().playSound(ravager.getLocation(), Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.5F, 1.1F);
 
-        // Fire the beam after 20 ticks (1 second) to sync with the sonic charge audio and stun timings
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
             if (ravager.isDead() || finalTarget.isDead()) return;
 
             Location start = ravager.getEyeLocation();
             Location end = finalTarget.getEyeLocation();
+            Vector direction = end.toVector().subtract(start.toVector()).normalize();
+            double maxRange = 20.0;
 
-            // Guard rails to check if the target has run too far away (range threshold of 25 blocks)
-            if (start.distanceSquared(end) > 25.0 * 25.0) return;
-
-            // 1. Play the biting/neck-stretching attack animation, matching the recovery scream
-            ravager.playEffect(EntityEffect.RAVAGER_ROARED);
-
-            // 2. Play Sonic Boom sound
+            ravager.playEffect(EntityEffect.ENTITY_ATTACK);
             ravager.getWorld().playSound(start, Sound.ENTITY_WARDEN_SONIC_BOOM, 2.0F, 1.0F);
 
-            // 3. Calculate trajectory and draw a piercing Sonic Boom ring path
-            Vector direction = end.toVector().subtract(start.toVector()).normalize();
-            double distance = start.distance(end);
+            DamageSource damageSource = DamageSource.builder(DamageType.SONIC_BOOM)
+                    .withCausingEntity(ravager)
+                    .withDirectEntity(ravager)
+                    .build();
 
             Set<LivingEntity> hitEntities = new HashSet<>();
 
-            for (double d = 0.0; d < distance; d += 1.5) {
+            for (double d = 0.0; d < maxRange; d += 1.5) {
                 Location point = start.clone().add(direction.clone().multiply(d));
                 point.getWorld().spawnParticle(Particle.SONIC_BOOM, point, 1, 0.0, 0.0, 0.0, 0.0);
 
-                // Pierce through all living entities in the path
                 for (Entity entity : point.getWorld().getNearbyEntities(point, 1.5, 1.5, 1.5)) {
                     if (entity instanceof LivingEntity && entity != ravager) {
                         LivingEntity living = (LivingEntity) entity;
                         if (isValidTarget(living) && hitEntities.add(living)) {
-                            // Inflict 10.0 true damage (5 hearts)
-                            living.damage(10.0, ravager);
-                            // Apply knockback
+                            living.damage(8.0, damageSource);
                             living.setVelocity(living.getVelocity().add(direction.clone().multiply(0.4)));
                         }
                     }
                 }
             }
 
-        }, 20L);
-    }
-
-    private void triggerSonicBoomAttack(Ravager ravager) {
-        LivingEntity target = ravager.getTarget();
-        if (target == null) {
-            double scanRadius = 15.0;
-            for (Entity near : ravager.getNearbyEntities(scanRadius, scanRadius, scanRadius)) {
-                if (near instanceof LivingEntity) {
-                    LivingEntity living = (LivingEntity) near;
-                    if (isValidTarget(living)) {
-                        target = living;
-                        break;
-                    }
-                }
-            }
-        }
-        if (target != null) {
-            triggerSonicBoomAttack(ravager, target);
-        }
+        }, 40L);
     }
 
     private boolean isValidTarget(LivingEntity entity) {
@@ -302,8 +265,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             Player p = (Player) entity;
             return p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR;
         }
-        // Protect illagers, custom raiders, and witches
-        if (entity instanceof Raider) {
+        if (entity instanceof Raider || entity instanceof Vex) {
             return false;
         }
         return !entity.isDead();
@@ -352,7 +314,6 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             return;
         Spellcaster king = (Spellcaster) evt.getEntity();
         Entity vehicle = king.getVehicle();
-        // Kings riding juggernauts are invulnerable
         if (isKing(king) && vehicle instanceof Ravager && isJuggernaut((Ravager) vehicle))
             evt.setCancelled(true);
     }
@@ -370,7 +331,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.TRIANGLE_TOP));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.setDisplayName(ChatColor.RED.toString() + ChatColor.ITALIC + "Raid Captain Banner");
+        meta.setDisplayName(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD + "Raid Captain Banner");
         banner.setItemMeta(meta);
         return banner;
     }

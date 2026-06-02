@@ -2,6 +2,7 @@ package com.solarrabbit.largeraids.misc;
 
 import com.solarrabbit.largeraids.LargeRaids;
 import com.solarrabbit.largeraids.util.CustomEggUtil;
+import com.solarrabbit.largeraids.raid.mob.manager.AdjudicatorManager;
 import com.solarrabbit.largeraids.raid.mob.manager.BomberManager;
 import com.solarrabbit.largeraids.raid.mob.manager.FireworkPillagerManager;
 import com.solarrabbit.largeraids.raid.mob.manager.KingRaiderManager;
@@ -76,16 +77,17 @@ public class CustomEggListener implements Listener {
         NamespacedKey bomberKey = new NamespacedKey(plugin, "bomber");
         NamespacedKey fireworkKey = new NamespacedKey(plugin, "firework_pillager");
         NamespacedKey kingKey = new NamespacedKey(plugin, "juggernaut_king");
+        NamespacedKey adjudicatorKey = new NamespacedKey(plugin, "adjudicator");
 
         boolean hasCustomBanner = pdc.has(necromancerKey, PersistentDataType.BYTE) ||
                 pdc.has(bomberKey, PersistentDataType.BYTE) ||
                 pdc.has(fireworkKey, PersistentDataType.BYTE) ||
-                pdc.has(kingKey, PersistentDataType.BYTE);
+                pdc.has(kingKey, PersistentDataType.BYTE) ||
+                pdc.has(adjudicatorKey, PersistentDataType.BYTE);
 
         if (hasCustomBanner && entity.getEquipment() != null) {
             ItemStack helmet = entity.getEquipment().getHelmet();
             if (helmet != null && helmet.getType() != Material.AIR) {
-                // Ensure duplicate drops are avoided if the item drops naturally
                 if (!event.getDrops().contains(helmet)) {
                     event.getDrops().add(helmet);
                 }
@@ -167,6 +169,11 @@ public class CustomEggListener implements Listener {
                 KingRaiderManager kingManager = new KingRaiderManager();
                 kingManager.loadSettings(plugin.getCustomMobsConfig());
                 kingManager.spawn(loc);
+                break;
+            case "adjudicator":
+                AdjudicatorManager adjudicatorManager = new AdjudicatorManager();
+                adjudicatorManager.loadSettings(plugin.getCustomMobsConfig());
+                adjudicatorManager.spawn(loc);
                 break;
             default:
                 plugin.getLogger().warning("Attempted to spawn unknown custom variant: " + variant);

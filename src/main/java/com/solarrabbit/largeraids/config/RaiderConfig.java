@@ -10,6 +10,8 @@ import java.util.function.Function;
 
 import com.solarrabbit.largeraids.LargeRaids;
 import com.solarrabbit.largeraids.PluginLogger.Level;
+import com.solarrabbit.largeraids.raid.mob.Adjudicator;
+import com.solarrabbit.largeraids.raid.mob.AdjudicatorRider;
 import com.solarrabbit.largeraids.raid.mob.Bomber;
 import com.solarrabbit.largeraids.raid.mob.FireworkPillager;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
@@ -18,6 +20,7 @@ import com.solarrabbit.largeraids.raid.mob.Necromancer;
 import com.solarrabbit.largeraids.raid.mob.Raider;
 import com.solarrabbit.largeraids.raid.mob.VanillaRaider;
 import com.solarrabbit.largeraids.raid.mob.VanillaRiderRaider;
+import com.solarrabbit.largeraids.raid.mob.manager.AdjudicatorManager;
 import com.solarrabbit.largeraids.raid.mob.manager.BomberManager;
 import com.solarrabbit.largeraids.raid.mob.manager.FireworkPillagerManager;
 import com.solarrabbit.largeraids.raid.mob.manager.KingRaiderManager;
@@ -53,7 +56,6 @@ public class RaiderConfig {
         Set<String> keys = config.getKeys(false);
         for (String key : keys)
             stringMappings.put(key, config.getIntegerList(key));
-        // TODO Not optimal way of getting vanilla raider manager
         mobManagers = JavaPlugin.getPlugin(LargeRaids.class).getMobManagers();
         mobsSupplierMap = new HashMap<>();
         mythicMobsSupplierMap = new HashMap<>();
@@ -83,7 +85,6 @@ public class RaiderConfig {
             List<Integer> list = stringMappings.remove(type.name().toLowerCase());
             if (list != null)
                 mobsSupplierMap.put(raiderSupplier, list);
-            // Counterparts raiders riding ravagers
             Function<Location, VanillaRiderRaider> riderRaiderSupplier = (loc) -> manager.spawnRider(loc, type);
             List<Integer> riderList = stringMappings.remove(type.name().toLowerCase() + "rider");
             if (riderList != null)
@@ -102,7 +103,7 @@ public class RaiderConfig {
         BomberManager bomberManager = (BomberManager) mobManagers.getMobManager(Bomber.class);
         Function<Location, Bomber> bomberSupplier = (loc) -> bomberManager.spawn(loc);
         List<Integer> bomberList = stringMappings.remove("bomber");
-        if (list != null)
+        if (bomberList != null)
             mobsSupplierMap.put(bomberSupplier, bomberList);
 
         NecromancerManager necromancerManager = (NecromancerManager) mobManagers.getMobManager(Necromancer.class);
@@ -116,6 +117,17 @@ public class RaiderConfig {
         List<Integer> kingRaiderList = stringMappings.remove("kingraider");
         if (kingRaiderList != null)
             mobsSupplierMap.put(kingRaiderSupplier, kingRaiderList);
+
+        AdjudicatorManager adjudicatorManager = (AdjudicatorManager) mobManagers.getMobManager(Adjudicator.class);
+        Function<Location, Adjudicator> adjudicatorSupplier = (loc) -> adjudicatorManager.spawn(loc);
+        List<Integer> adjudicatorList = stringMappings.remove("adjudicator");
+        if (adjudicatorList != null)
+            mobsSupplierMap.put(adjudicatorSupplier, adjudicatorList);
+
+        Function<Location, AdjudicatorRider> adjudicatorRiderSupplier = (loc) -> adjudicatorManager.spawnRider(loc);
+        List<Integer> adjudicatorRiderList = stringMappings.remove("adjudicatorrider");
+        if (adjudicatorRiderList != null)
+            mobsSupplierMap.put(adjudicatorRiderSupplier, adjudicatorRiderList);
     }
 
     private void loadMythicRaiders() {
@@ -124,23 +136,16 @@ public class RaiderConfig {
         MythicReloadedEvent.getHandlerList().unregister(plugin);
         PluginEnableEvent.getHandlerList().unregister(plugin);
         Bukkit.getPluginManager().registerEvents(loader, plugin);
-        // Load MythicMobs if plugin is (re)loaded
         Optional<MythicBukkit> adapter = Optional.ofNullable(MythicBukkit.inst());
         adapter.map(MythicBukkit::getMobManager).ifPresent(loader::loadMobs);
     }
 
     private class MythicMobsLoader implements Listener {
-        /**
-         * Handles case when MythicMobs is reloaded.
-         */
         @EventHandler
         private void onMythicMobsLoad(MythicReloadedEvent evt) {
             loadMobs(evt.getInstance().getMobManager());
         }
 
-        /**
-         * Handles case when MythicMobs is loaded after LargeRaids.
-         */
         @EventHandler
         private void onPluginEnable(PluginEnableEvent evt) {
             Plugin plugin = evt.getPlugin();
@@ -161,5 +166,4 @@ public class RaiderConfig {
                         });
         }
     }
-
 }

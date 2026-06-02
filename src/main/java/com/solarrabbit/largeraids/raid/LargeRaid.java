@@ -35,6 +35,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Raid.RaidStatus;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Raider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,10 +45,6 @@ import org.bukkit.potion.PotionEffectType;
 public class LargeRaid {
     private static final int RADIUS = 144;
     private static final int VANILLA_RAID_OMEN_LEVEL = 2;
-    /**
-     * Raiders will be invulnerable for 1 second to avoid damage from entity
-     * cramming.
-     */
     private static final int INVULNERABLE_TICKS = 20;
     private final RaidConfig raidConfig;
     private final RewardsConfig rewardsConfig;
@@ -65,13 +62,6 @@ public class LargeRaid {
     private double raidTargetRadius;
     private double raidTargetNavSpeed;
 
-    /**
-     * Constructs a large raid object.
-     *
-     * @param config    configurations that the large raid should follow
-     * @param location  location at which the large raid should be triggered
-     * @param omenLevel the starting omen level of the large raid
-     */
     LargeRaid(RaidConfig raidConfig, RewardsConfig rewardsConfig, Location location, int omenLevel) {
         this.raidConfig = raidConfig;
         this.rewardsConfig = rewardsConfig;
@@ -84,20 +74,12 @@ public class LargeRaid {
         totalWaves = Math.max(5, this.omenLevel);
     }
 
-    /**
-     * Kicks start the raid if there isn't one in progress in the location. The
-     * first wave will be broadcasted to players within range with a summoning
-     * sound. This method should always be called when {@link RaidManager} is
-     * idle, and set back to active after calling the method.
-     *
-     * @return {@code true} if a new raid starts successfully
-     */
     boolean startRaid() {
-        if (!getNMSRaidAtCenter().isEmpty()) // There is an ongoing raid
+        if (!getNMSRaidAtCenter().isEmpty())
             return false;
 
         AbstractRaidWrapper raid = createRaid(startLoc);
-        if (raid.isEmpty()) // fail to create raid
+        if (raid.isEmpty())
             return false;
 
         setRaid(VersionUtil.getCraftRaidWrapper(raid).getRaid());
@@ -114,19 +96,13 @@ public class LargeRaid {
         return true;
     }
 
-    /**
-     * Triggers the next wave by updating the heros records and reassigning a new
-     * vanilla raid. The wave will be broadcasted to players within range. This
-     * method should always be called when {@link RaidManager} is idle, and
-     * set back to active after calling the method.
-     */
     void triggerNextWave() {
         currentWave++;
         broadcastWave();
 
         getCurrentNMSRaid().stop();
         AbstractRaidWrapper raid = createRaid(getCenter());
-        if (raid.isEmpty()) // fail to create raid
+        if (raid.isEmpty())
             return;
         setRaid(VersionUtil.getCraftRaidWrapper(raid).getRaid());
 
@@ -134,20 +110,14 @@ public class LargeRaid {
             prepareLastWave();
     }
 
-    /**
-     * Spawns the raiders for the wave. This is a follow-up method of
-     * {@link #triggerNextWave()}, and called to replace vanilla mobs spawns. This
-     * method should always be called when {@link RaidManager} is idle, and
-     * set back to active after calling the method.
-     */
     void spawnWave() {
         List<Raider> raiders = currentRaid.getRaiders();
         Location loc = getWaveSpawnLocation();
 
-        // happens when spawned mobs are too far from the village
         if (getCenter().distanceSquared(loc) >= Math.pow(RADIUS, 2)) {
-            for (Raider raider : raiders)
-                raider.remove();
+            for (Raider raider : raiders) {
+                removeRaiderAndMount(raider);
+            }
             if (!isLastWave())
                 triggerNextWave();
             return;
@@ -156,6 +126,8 @@ public class LargeRaid {
         AbstractRaidWrapper nmsRaid = getCurrentNMSRaid();
 
         List<Raider> newRaiders = new ArrayList<>();
+        List<Entity> nonRaiderVehicles = new ArrayList<>();
+
         for (Map.Entry<Function<Location, ? extends com.solarrabbit.largeraids.raid.mob.Raider>, Integer> kv : raidConfig
                 .getRaiders().getWaveMobs(this.currentWave).entrySet()) {
             for (int i = 0; i < kv.getValue(); i++) {
@@ -165,10 +137,17 @@ public class LargeRaid {
                 bukkitEntity.setInvulnerable(true);
                 newRaiders.add(bukkitEntity);
                 if (entity instanceof RiderRaider) {
-                    Raider ravager = (Raider) ((RiderRaider) entity).getVehicle();
-                    nmsRaid.joinRaid(2, VersionUtil.getCraftRaiderWrapper(ravager).getHandle(), null, true);
-                    ravager.setInvulnerable(true);
-                    newRaiders.add(ravager);
+                    Entity vehicle = ((RiderRaider) entity).getVehicle();
+                    if (vehicle instanceof Raider) {
+                        Raider ravager = (Raider) vehicle;
+                        nmsRaid.joinRaid(2, VersionUtil.getCraftRaiderWrapper(ravager).getHandle(), null, true);
+                        ravager.setInvulnerable(true);
+                        newRaiders.add(ravager);
+                    } else if (vehicle != null) {
+                        // Protect non-Raider vehicles (like Horses) safely
+                        vehicle.setInvulnerable(true);
+                        nonRaiderVehicles.add(vehicle);
+                    }
                 }
             }
         }
@@ -178,106 +157,78 @@ public class LargeRaid {
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
             for (Raider raider : newRaiders)
                 raider.setInvulnerable(false);
+            for (Entity vehicle : nonRaiderVehicles)
+                vehicle.setInvulnerable(false);
         }, INVULNERABLE_TICKS);
 
         raiders.forEach(raider -> {
             nmsRaid.removeFromRaid(VersionUtil.getCraftRaiderWrapper(raider).getHandle(), true);
-            raider.remove();
+            removeRaiderAndMount(raider);
         });
     }
 
-    /**
-     * Last wave is not skippable, use {@link #stopRaid()} instead. This
-     * method should always be called when {@link RaidManager} is idle, and
-     * set back to active after calling the method.
-     */
+    private void removeRaiderAndMount(Raider raider) {
+        Entity vehicle = raider.getVehicle();
+        if (vehicle != null && vehicle.getType() == EntityType.HORSE) {
+            vehicle.remove();
+        }
+        raider.remove();
+    }
+
     public void skipWave() {
         if (isLastWave())
             return;
-        else if (!isLoading())
-            for (Raider raider : currentRaid.getRaiders())
-                raider.remove();
+        else if (!isLoading()) {
+            for (Raider raider : currentRaid.getRaiders()) {
+                removeRaiderAndMount(raider);
+            }
+        }
         triggerNextWave();
     }
 
-    /**
-     * Stops the ongoing raid.
-     */
     public void stopRaid() {
         getCurrentNMSRaid().stop();
-        for (Raider raider : currentRaid.getRaiders())
-            raider.remove();
+        for (Raider raider : currentRaid.getRaiders()) {
+            removeRaiderAndMount(raider);
+        }
     }
 
-    /**
-     * Announces victory with a sound and award heros with configured rewards.
-     */
     void announceVictory() {
         Sound sound = raidConfig.getSounds().getVictorySound();
         if (sound != null)
             playSoundToPlayersInRadius(sound);
-        getCurrentNMSRaid().getHeroesOfTheVillage().clear(); // prevent unintentional vanilla rewards
+        getCurrentNMSRaid().getHeroesOfTheVillage().clear();
         for (UUID uuid : playerDamage.keySet())
             Optional.ofNullable(Bukkit.getPlayer(uuid)).filter(this::shouldAwardPlayer).ifPresent(this::awardPlayer);
     }
 
-    /**
-     * Announces defeat with a sound.
-     */
     void announceDefeat() {
         Sound sound = raidConfig.getSounds().getDefeatSound();
         if (sound != null)
             playSoundToPlayersInRadius(sound);
     }
 
-    /**
-     * Applies the glowing effect to all raiders.
-     */
     public void applyGlowing() {
         PotionEffect effect = new PotionEffect(PotionEffectType.GLOWING, 5, 0);
         currentRaid.getRaiders().forEach(raider -> raider.addPotionEffect(effect));
     }
 
-    /**
-     * Returns the center of the raid.
-     */
     public Location getCenter() {
         return currentRaid == null ? startLoc : currentRaid.getLocation();
     }
 
-    /**
-     * Returns the omen level of the large raid.
-     *
-     * @return large raid's omen level
-     */
     public int getRaidOmenLevel() {
         return omenLevel;
     }
 
-    /**
-     * Returns the wave that the large raid is currently at.
-     *
-     * @return current wave of the large raid
-     */
     public int getCurrentWave() {
         return currentWave;
     }
 
-    /**
-     * Returns the total waves that the large raid current has. Total waves may
-     * change according to its omen levels.
-     *
-     * @return current total waves
-     */
     public int getTotalWaves() {
         return totalWaves;
     }
 
-    /**
-     * Returns whether the large raid is at its last wave.
-     *
-     * @return {@code true} if the large raid has reached its last wave
-     */
     public boolean isLastWave() {
         return currentWave == totalWaves;
     }
@@ -294,32 +245,16 @@ public class LargeRaid {
         this.raidersOutlined = raidersOutlined;
     }
 
-    /**
-     * Returns whether the raid is in the midst of loading a wave - a period of time
-     * in between waves or when the raid just started.
-     * 
-     * @return {@code true} if wave is loading
-     */
     public boolean isLoading() {
         AbstractRaidWrapper nmsRaid = getCurrentNMSRaid();
         return !nmsRaid.hasFirstWaveSpawned() || nmsRaid.isBetweenWaves();
     }
 
-    /**
-     * Returns whether the <b>vanilla raid instance</b> has spawned at least once.
-     * 
-     * @return {@code true} if wave is loading
-     */
     public boolean firstWaveSpawned() {
         AbstractRaidWrapper nmsRaid = getCurrentNMSRaid();
         return nmsRaid.hasFirstWaveSpawned();
     }
 
-    /**
-     * Returns the number of raiders in the raid who are alive.
-     *
-     * @return number of alive raiders
-     */
     public int getTotalRaidersAlive() {
         try {
             return currentRaid == null ? 0 : currentRaid.getRaiders().size();
@@ -328,12 +263,6 @@ public class LargeRaid {
         }
     }
 
-    /**
-     * Absorbs a certain level of raid omen, which may change the overall omen level
-     * and total waves of the large raid.
-     *
-     * @param level levels to absorb
-     */
     void absorbOmenLevel(int level) {
         omenLevel = Math.min(this.maxTotalWaves, this.omenLevel + level);
         totalWaves = Math.max(5, omenLevel);
@@ -352,14 +281,6 @@ public class LargeRaid {
         return playerKills;
     }
 
-    /**
-     * Set the raid omen level of the current raid back to {@code 2} if it has been
-     * increased by the absorption of player's omen. Used for detecting whether a
-     * player with Raid Omen effect entered the raid.
-     *
-     * @return {@code true} if the omen level of the actual raid has been increased
-     *         above 2
-     */
     public boolean releaseOmen() {
         if (currentRaid.getBadOmenLevel() <= VANILLA_RAID_OMEN_LEVEL)
             return false;
@@ -497,16 +418,6 @@ public class LargeRaid {
         return true;
     }
 
-    /**
-     * Creates a raid with a fake player entity at the given location. The raid's
-     * raid omen is set to 2 arbitrarily. This method should always be called when
-     * {@link RaidManager} is idle, and set back to active after calling the
-     * method. This method may return empty wrapper if the raid is cancelled by
-     * third party.
-     *
-     * @param location to create the raid
-     * @return wrapped NMS raid created
-     */
     private AbstractRaidWrapper createRaid(Location location) {
         AbstractPlayerEntityWrapper abstractPlayer = createEntityPlayer(location);
         AbstractWorldServerWrapper level = VersionUtil.getCraftWorldWrapper(location.getWorld()).getHandle();
@@ -514,7 +425,6 @@ public class LargeRaid {
         try {
             raids.createOrExtendRaid(abstractPlayer);
         } catch (NullPointerException e) {
-            // Exception caused by failure to send packets to non-existing npc
         }
         raids.setDirty();
 
@@ -526,12 +436,6 @@ public class LargeRaid {
         return raid;
     }
 
-    /**
-     * Creates a fake entity player at the given location.
-     *
-     * @param location for the entity to be set at
-     * @return wrapped player entity
-     */
     private AbstractPlayerEntityWrapper createEntityPlayer(Location location) {
         AbstractMinecraftServerWrapper nmsServer = VersionUtil.getCraftServerWrapper(Bukkit.getServer()).getServer();
         AbstractWorldServerWrapper nmsWorld = VersionUtil.getCraftWorldWrapper(location.getWorld()).getHandle();
@@ -555,5 +459,4 @@ public class LargeRaid {
                 return 0;
         }
     }
-
 }

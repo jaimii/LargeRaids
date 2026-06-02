@@ -30,6 +30,8 @@ raid:
     evokerrider: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     illusionerrider: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     fireworkpillager: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    adjudicator: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    adjudicatorrider: [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
     bomber: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     necromancer: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     kingraider: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -91,6 +93,9 @@ miscellaneous:
 custom-mobs:
   firework-pillager:
     health: 48.0
+  adjudicator:
+    health: 24.0
+    horse-health: 30.0
   bomber:
     bomber-explosive-power: 1.0
     tnt-explosive-power: 1.5
@@ -102,3 +107,6 @@ custom-mobs:
     fang-damage: 6.0
     fire-ticks: 140
     regen-level: 4
+    evoker-health: 24.0
+    evoker-regen-level: 1
+

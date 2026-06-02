@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.solarrabbit.largeraids.config.custommobs.CustomMobsConfig;
+import com.solarrabbit.largeraids.raid.mob.Adjudicator;
+import com.solarrabbit.largeraids.raid.mob.AdjudicatorRider;
 import com.solarrabbit.largeraids.raid.mob.Bomber;
 import com.solarrabbit.largeraids.raid.mob.FireworkPillager;
 import com.solarrabbit.largeraids.raid.mob.KingRaider;
@@ -31,7 +33,11 @@ public class MobManagers {
         managers.put(Necromancer.class, new NecromancerManager());
         managers.put(KingRaider.class, new KingRaiderManager());
         managers.put(MythicRaider.class, new MythicRaiderManager());
-        // Vanilla raiders and rider raiders use the same manager
+
+        AdjudicatorManager adjudicatorManager = new AdjudicatorManager();
+        managers.put(Adjudicator.class, adjudicatorManager);
+        managers.put(AdjudicatorRider.class, adjudicatorManager);
+
         VanillaRaiderManager vanillaRaiderManager = new VanillaRaiderManager();
         managers.put(VanillaRaider.class, vanillaRaiderManager);
         managers.put(VanillaRiderRaider.class, vanillaRaiderManager);
@@ -47,6 +53,8 @@ public class MobManagers {
 
     public List<Listener> getListenerManagers() {
         return managers.values().stream().filter(Listener.class::isInstance)
-                .map(Listener.class::cast).collect(Collectors.toList());
+                .map(Listener.class::cast)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

@@ -27,7 +27,7 @@ public class CustomEggUtil {
         String lowerVariant = variant.toLowerCase(java.util.Locale.ROOT);
 
         if (lowerVariant.startsWith("mythic:")) {
-            String mobName = variant.substring(7); // Keep original cosmetic case
+            String mobName = variant.substring(7);
             material = Material.WITCH_SPAWN_EGG;
             displayName = mobName + " Spawn Egg";
             color = NamedTextColor.AQUA;
@@ -53,6 +53,11 @@ public class CustomEggUtil {
                     displayName = "King Raider Spawn Egg";
                     color = NamedTextColor.YELLOW;
                     break;
+                case "adjudicator":
+                    material = Material.VINDICATOR_SPAWN_EGG;
+                    displayName = "Adjudicator Spawn Egg";
+                    color = NamedTextColor.DARK_GREEN;
+                    break;
                 default:
                     return null;
             }
@@ -63,9 +68,8 @@ public class CustomEggUtil {
         if (meta != null) {
             meta.displayName(Component.text(displayName, color).decoration(TextDecoration.ITALIC, false));
             NamespacedKey key = new NamespacedKey(plugin, PDC_KEY);
-            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, variant); // Save original string
+            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, variant);
 
-            // Forces the spawn egg item stack to glow as if it is enchanted
             meta.setEnchantmentGlintOverride(true);
 
             egg.setItemMeta(meta);
