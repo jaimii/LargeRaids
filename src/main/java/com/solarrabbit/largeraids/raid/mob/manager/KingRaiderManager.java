@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -25,6 +26,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Raider;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Spellcaster;
@@ -44,7 +46,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class KingRaiderManager implements BossRaiderManager, Listener {
     private double ravagerHealth;
@@ -94,6 +101,37 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
 
         ravager.addPassenger(rider);
         return new KingRaider(rider, ravager, bossBar);
+    }
+
+    // --- PREVENT ALL RAVAGERS FROM TAKING DAMAGE FROM RAIDER FELLOWS ---
+    @EventHandler
+    private void onRavagerTakeDamage(EntityDamageByEntityEvent evt) {
+        if (!(evt.getEntity() instanceof Ravager))
+            return;
+
+        Entity damager = evt.getDamager();
+        Entity realDamager = damager;
+
+        // Handle Projectiles (arrows, firework rockets, etc.)
+        if (damager instanceof Projectile) {
+            ProjectileSource source = ((Projectile) damager).getShooter();
+            if (source instanceof Entity) {
+                realDamager = (Entity) source;
+            }
+        }
+
+        // Handle Evoker Fangs
+        if (damager instanceof EvokerFangs) {
+            LivingEntity owner = ((EvokerFangs) damager).getOwner();
+            if (owner != null) {
+                realDamager = owner;
+            }
+        }
+
+        // Cancel if the damager (or projectile shooter/fangs owner) is a Raider/illager
+        if (realDamager instanceof Raider) {
+            evt.setCancelled(true);
+        }
     }
 
     // --- CONDITION 1: TRIGGERS ON EVERY 100 HP LOSS ---
@@ -164,7 +202,7 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
 
         Player player = (Player) evt.getEntity();
 
-        // Verify if the player is actively blocking with a shield
+        // Check if player blocked using a shield
         if (player.isBlocking()) {
             // Check the 180-degree blocking arc facing the Juggernaut via dot product
             Vector playerLook = player.getLocation().getDirection().setY(0).normalize();
@@ -175,27 +213,29 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
                 // 1. Instantly play the dazed stun animation (shaking head side-to-side)
                 ravager.playEffect(EntityEffect.RAVAGER_STUNNED);
 
-                // 2. Trigger the dazed charging animation and counter-attack once the 40-tick stun expires
+                // 2. Schedule the charging sound after 20 ticks (1 second into the stun)
+                // This ensures the beam fires at exactly 40 ticks, syncing with the recovery scream
                 Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
                     if (!ravager.isDead() && !player.isDead()) {
                         triggerSonicBoomAttack(ravager, player);
                     }
-                }, 40L); // 40 ticks = 2 seconds stun duration
+                }, 20L);
             }
         }
     }
 
+    // --- THE PIERCING SONIC BEAM ATTACK ---
     private void triggerSonicBoomAttack(Ravager ravager, LivingEntity target) {
         if (target == null) return;
         final LivingEntity finalTarget = target;
 
-        // Plays the dazed, head-shaking animation as a charge-up visual before shooting the beam
+        // Play the dazed, head-shaking animation as a charge-up visual
         ravager.playEffect(EntityEffect.RAVAGER_STUNNED);
 
         // Play the Warden Sonic Charge charging sound immediately
         ravager.getWorld().playSound(ravager.getLocation(), Sound.ENTITY_WARDEN_SONIC_CHARGE, 1.5F, 1.1F);
 
-        // Fire the beam after 20 ticks (1 second) to sync with the sonic charge audio
+        // Fire the beam after 20 ticks (1 second) to sync with the sonic charge audio and stun timings
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(LargeRaids.class), () -> {
             if (ravager.isDead() || finalTarget.isDead()) return;
 
@@ -205,23 +245,35 @@ public class KingRaiderManager implements BossRaiderManager, Listener {
             // Guard rails to check if the target has run too far away (range threshold of 25 blocks)
             if (start.distanceSquared(end) > 25.0 * 25.0) return;
 
-            // Play Sonic Boom sound
+            // 1. Play the biting/neck-stretching attack animation, matching the recovery scream
+            ravager.playEffect(EntityEffect.RAVAGER_ROARED);
+
+            // 2. Play Sonic Boom sound
             ravager.getWorld().playSound(start, Sound.ENTITY_WARDEN_SONIC_BOOM, 2.0F, 1.0F);
 
-            // Calculate trajectory and draw Sonic Boom ring path
+            // 3. Calculate trajectory and draw a piercing Sonic Boom ring path
             Vector direction = end.toVector().subtract(start.toVector()).normalize();
             double distance = start.distance(end);
+
+            Set<LivingEntity> hitEntities = new HashSet<>();
 
             for (double d = 0.0; d < distance; d += 1.5) {
                 Location point = start.clone().add(direction.clone().multiply(d));
                 point.getWorld().spawnParticle(Particle.SONIC_BOOM, point, 1, 0.0, 0.0, 0.0, 0.0);
+
+                // Pierce through all living entities in the path
+                for (Entity entity : point.getWorld().getNearbyEntities(point, 1.5, 1.5, 1.5)) {
+                    if (entity instanceof LivingEntity && entity != ravager) {
+                        LivingEntity living = (LivingEntity) entity;
+                        if (isValidTarget(living) && hitEntities.add(living)) {
+                            // Inflict 10.0 true damage (5 hearts)
+                            living.damage(10.0, ravager);
+                            // Apply knockback
+                            living.setVelocity(living.getVelocity().add(direction.clone().multiply(0.4)));
+                        }
+                    }
+                }
             }
-
-            // Inflict 10.0 true damage (5 hearts)
-            finalTarget.damage(10.0, ravager);
-
-            // Push target away slightly along the vector path
-            finalTarget.setVelocity(finalTarget.getVelocity().add(direction.clone().multiply(0.4)));
 
         }, 20L);
     }
