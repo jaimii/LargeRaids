@@ -93,6 +93,7 @@ public final class LargeRaids extends JavaPlugin {
         getServer().getPluginManager().registerEvents(bossbarCreator, this);
         BookGenerator bookGen = new BookGenerator(this.getResource("traderbook.yml"));
         getServer().getPluginManager().registerEvents(new TraderBookListener(bookGen, this), this);
+        getServer().getPluginManager().registerEvents(new CustomEggListener(this), this);
 
         // Additional listeners for custom mobs
         mobManagers = new MobManagers();
@@ -129,6 +130,9 @@ public final class LargeRaids extends JavaPlugin {
     }
 
     private void loadCommands() {
+        com.solarrabbit.largeraids.util.CustomEggUtil eggUtil = new com.solarrabbit.largeraids.util.CustomEggUtil(this);
+        getCommand("lregg").setExecutor(new com.solarrabbit.largeraids.command.GiveEggCommand(eggUtil));
+        getCommand("lregg").setTabCompleter(new com.solarrabbit.largeraids.command.completer.GiveEggTabCompleter());
         getCommand("lrstart").setExecutor(new StartRaidCommand(this));
         getCommand("lrstart").setTabCompleter(new StartStopRaidCommandCompleter(db));
         getCommand("lrskip").setExecutor(new SkipWaveCommand(this));

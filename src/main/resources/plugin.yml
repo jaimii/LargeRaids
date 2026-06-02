@@ -48,6 +48,10 @@ commands:
     description: Makes the entity type in range of the player path-find to a given location. If pathfind_once is true, the target will be removed on arrival.
     usage: /<command> <entity_class> <range_from_player> <x> <y> <z> <radius> <navSpeed> <prio> <pathfind_once>, /<command> <entity_class> <range_from_player> clear
     permission: largeraids.mobcontrol
+  lregg:
+    description: Gives custom spawn eggs for custom raid variants.
+    permission: largeraids.admin.giveegg
+    usage: /<command> <player> <variant> [amount]
 
 permissions:
   largeraids.*:
@@ -97,4 +101,7 @@ permissions:
     default: op
   largeraids.mobcontrol:
     description: Allow access to lrmobcontrol command.
+    default: op
+  largeraids.admin.giveegg:
+    description: Allows admins to receive custom variant spawn eggs.
     default: op
