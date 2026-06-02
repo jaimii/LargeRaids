@@ -124,6 +124,28 @@ public class NecromancerManager implements CustomRaiderManager, Listener {
             evt.setCancelled(true);
     }
 
+    @EventHandler
+    private void onVillagerTransform(org.bukkit.event.entity.EntityTransformEvent evt) {
+        if (evt.getTransformReason() == org.bukkit.event.entity.EntityTransformEvent.TransformReason.LIGHTNING) {
+            if (evt.getEntityType() == EntityType.WITCH) {
+                if (isNecromancerLightningNearby(evt.getEntity().getLocation())) {
+                    evt.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    private void onCreatureSpawn(CreatureSpawnEvent evt) {
+        if (evt.getSpawnReason() == CreatureSpawnEvent.SpawnReason.LIGHTNING) {
+            if (evt.getEntityType() == EntityType.WITCH) {
+                if (isNecromancerLightningNearby(evt.getLocation())) {
+                    evt.setCancelled(true);
+                }
+            }
+        }
+    }
+
     private ItemStack getDefaultBanner() {
         ItemStack banner = new ItemStack(Material.GRAY_BANNER);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
@@ -147,6 +169,19 @@ public class NecromancerManager implements CustomRaiderManager, Listener {
     private boolean isNecromancerLightning(LightningStrike lightning) {
         PersistentDataContainer pdc = lightning.getPersistentDataContainer();
         return pdc.has(getNecromancerLightningNamespacedKey(), PersistentDataType.BYTE);
+    }
+
+    private boolean isNecromancerLightningNearby(Location loc) {
+        double radius = 6.0;
+        for (org.bukkit.entity.Entity entity : loc.getWorld().getNearbyEntities(loc, radius, radius, radius)) {
+            if (entity instanceof org.bukkit.entity.LightningStrike) {
+                org.bukkit.entity.LightningStrike lightning = (org.bukkit.entity.LightningStrike) entity;
+                if (lightning.getPersistentDataContainer().has(getNecromancerLightningNamespacedKey(), PersistentDataType.BYTE)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private NamespacedKey getNecromancerNamespacedKey() {

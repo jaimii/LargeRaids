@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class CustomEggListener implements Listener {
@@ -63,6 +64,32 @@ public class CustomEggListener implements Listener {
         Player player = event.getPlayer();
         if (player.getGameMode() != GameMode.CREATIVE) {
             item.setAmount(item.getAmount() - 1);
+        }
+    }
+
+    @EventHandler
+    public void onMobDeath(org.bukkit.event.entity.EntityDeathEvent event) {
+        org.bukkit.entity.LivingEntity entity = event.getEntity();
+        PersistentDataContainer pdc = entity.getPersistentDataContainer();
+
+        NamespacedKey necromancerKey = new NamespacedKey(plugin, "necromancer");
+        NamespacedKey bomberKey = new NamespacedKey(plugin, "bomber");
+        NamespacedKey fireworkKey = new NamespacedKey(plugin, "firework_pillager");
+        NamespacedKey kingKey = new NamespacedKey(plugin, "juggernaut_king");
+
+        boolean hasCustomBanner = pdc.has(necromancerKey, PersistentDataType.BYTE) ||
+                pdc.has(bomberKey, PersistentDataType.BYTE) ||
+                pdc.has(fireworkKey, PersistentDataType.BYTE) ||
+                pdc.has(kingKey, PersistentDataType.BYTE);
+
+        if (hasCustomBanner && entity.getEquipment() != null) {
+            ItemStack helmet = entity.getEquipment().getHelmet();
+            if (helmet != null && helmet.getType() != Material.AIR) {
+                // Ensure duplicate drops are avoided if the item drops naturally
+                if (!event.getDrops().contains(helmet)) {
+                    event.getDrops().add(helmet);
+                }
+            }
         }
     }
 

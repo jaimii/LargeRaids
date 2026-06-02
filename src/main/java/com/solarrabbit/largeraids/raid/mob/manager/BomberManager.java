@@ -55,7 +55,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         equipment.setHelmet(getDefaultBanner());
         equipment.setHelmetDropChance(1.0f);
         evoker.getPersistentDataContainer().set(getBomberNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
-        evoker.setCustomName("Bomber");
+        evoker.setCustomName("§cRampart");
         return new Bomber(evoker);
     }
 
@@ -95,7 +95,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         if (isBomber((Spellcaster) owner)) {
             vex.getPersistentDataContainer().set(getVexNamespacedKey(), PersistentDataType.BYTE, (byte) 0);
             vex.getEquipment().setItemInMainHand(new ItemStack(Material.TNT));
-            vex.setCustomName("Bomber Vex");
+            vex.setCustomName("§cDrone Vex");
         }
     }
 
@@ -144,7 +144,7 @@ public class BomberManager implements CustomRaiderManager, Listener {
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.CIRCLE));
         meta.addPattern(new Pattern(DyeColor.BLACK, PatternType.BORDER));
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        meta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.ITALIC + "Bomber Banner");
+        meta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.ITALIC + "§cRampart Banner");
         banner.setItemMeta(meta);
         return banner;
     }

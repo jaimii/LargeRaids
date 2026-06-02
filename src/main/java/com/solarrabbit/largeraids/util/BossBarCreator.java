@@ -69,14 +69,28 @@ public class BossBarCreator implements Listener {
     private void updateBossBarVisibility(Raider boss) {
         BossBar bar = RAID_BOSSES.get(boss);
         bar.removeAll();
-        AbstractRaidWrapper nmsRaid = VersionUtil.getCraftRaiderWrapper(boss).getHandle().getCurrentRaid();
-        if (nmsRaid.isEmpty())
-            return;
-        AbstractCraftRaidWrapper craftRaid = VersionUtil.getCraftRaidWrapper(nmsRaid);
-        Optional<LargeRaid> lr = raidManager.getLargeRaid(craftRaid.getRaid());
+
         if (boss.isDead()) {
             unregisterEntity(boss);
-        } else if (lr.isPresent()) {
+            return;
+        }
+
+        AbstractRaidWrapper nmsRaid = VersionUtil.getCraftRaiderWrapper(boss).getHandle().getCurrentRaid();
+        if (nmsRaid.isEmpty()) {
+            // Fallback: Spawned outside of an active raid (e.g., via spawn egg)
+            double radius = 144.0;
+            double radiusSquared = radius * radius;
+            for (Player player : boss.getWorld().getPlayers()) {
+                if (player.getLocation().distanceSquared(boss.getLocation()) <= radiusSquared) {
+                    bar.addPlayer(player);
+                }
+            }
+            return;
+        }
+
+        AbstractCraftRaidWrapper craftRaid = VersionUtil.getCraftRaidWrapper(nmsRaid);
+        Optional<LargeRaid> lr = raidManager.getLargeRaid(craftRaid.getRaid());
+        if (lr.isPresent()) {
             Set<Player> players = lr.get().getPlayersInRadius();
             for (Player player : players)
                 bar.addPlayer(player);
