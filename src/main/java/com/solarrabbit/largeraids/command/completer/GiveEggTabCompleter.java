@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GiveEggTabCompleter implements TabCompleter {
-    private final List<String> variants = Arrays.asList("necromancer", "bomber", "firework", "king", "mythic");
+    private final List<String> variants = Arrays.asList("necromancer", "bomber", "firework", "king", "mythic:");
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {

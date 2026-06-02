@@ -7,6 +7,8 @@ import com.solarrabbit.largeraids.raid.mob.manager.FireworkPillagerManager;
 import com.solarrabbit.largeraids.raid.mob.manager.KingRaiderManager;
 import com.solarrabbit.largeraids.raid.mob.manager.MythicRaiderManager;
 import com.solarrabbit.largeraids.raid.mob.manager.NecromancerManager;
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -103,7 +105,20 @@ public class CustomEggListener implements Listener {
     }
 
     private void spawnCustomMob(String variant, Location loc) {
-        switch (variant.toLowerCase()) {
+        String lowerVariant = variant.toLowerCase(java.util.Locale.ROOT);
+
+        if (lowerVariant.startsWith("mythic:")) {
+            String mobName = variant.substring(7); // Parse the actual mob ID
+            MythicMob type = MythicBukkit.inst().getMobManager().getMythicMob(mobName).orElse(null);
+            if (type != null) {
+                new MythicRaiderManager().spawn(loc, type);
+            } else {
+                plugin.getLogger().warning("Failed to spawn MythicRaider. Unknown MythicMob: " + mobName);
+            }
+            return;
+        }
+
+        switch (lowerVariant) {
             case "necromancer":
                 new NecromancerManager().spawn(loc);
                 break;
@@ -115,9 +130,6 @@ public class CustomEggListener implements Listener {
                 break;
             case "king":
                 new KingRaiderManager().spawn(loc);
-                break;
-            case "mythic":
-                new MythicRaiderManager().spawn(loc);
                 break;
             default:
                 plugin.getLogger().warning("Attempted to spawn unknown custom variant: " + variant);

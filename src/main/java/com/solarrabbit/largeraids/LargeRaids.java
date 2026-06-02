@@ -29,6 +29,7 @@ import com.solarrabbit.largeraids.trigger.omen.VillageAbsorbOmenListener;
 import com.solarrabbit.largeraids.util.BossBarCreator;
 import com.solarrabbit.largeraids.village.BellListener;
 import com.solarrabbit.largeraids.village.VillageManager;
+import com.solarrabbit.largeraids.misc.CustomEggListener;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;

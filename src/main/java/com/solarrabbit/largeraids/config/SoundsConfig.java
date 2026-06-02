@@ -31,16 +31,31 @@ public class SoundsConfig {
         return defeatSound;
     }
 
-    private Sound getSound(@Nonnull String name)
-    {
-        try {
+    private Sound getSound(@Nonnull String name) {
+        // 1. Lowercase standard namespaced string conversion
+        String formattedName = name.toLowerCase(java.util.Locale.ROOT).trim();
 
-            return Sound.valueOf(name);
+        // 2. Try parsing namespaced key directly (e.g., "block.anvil.land")
+        org.bukkit.NamespacedKey key = org.bukkit.NamespacedKey.fromString(formattedName);
+        Sound sound = (key != null) ? org.bukkit.Registry.SOUNDS.get(key) : null;
 
-        } catch (IllegalArgumentException ex) {
-
-            return null;
-
+        // 3. Fallback for legacy enum config strings containing underscores (e.g., "BLOCK_ANVIL_LAND")
+        if (sound == null) {
+            String legacyFormatted = formattedName.replace('_', '.');
+            org.bukkit.NamespacedKey legacyKey = org.bukkit.NamespacedKey.fromString(legacyFormatted);
+            sound = (legacyKey != null) ? org.bukkit.Registry.SOUNDS.get(legacyKey) : null;
         }
+
+        // 4. Safe fallback for older API versions, suppressing the deprecation warning
+        if (sound == null) {
+            try {
+                @SuppressWarnings("deprecation")
+                Sound valueOfSound = Sound.valueOf(name.toUpperCase(java.util.Locale.ROOT));
+                sound = valueOfSound;
+            } catch (IllegalArgumentException | NullPointerException ignored) {
+                // Return null if not a valid sound name
+            }
+        }
+        return sound;
     }
 }
